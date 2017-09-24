@@ -18,9 +18,6 @@ var GAME = (function () {
     // game mode - different scenes within the game
     var mode;
     
-    // references this object
-    var game;
-    
     // scrolling variables
     var scrollX = 0;
     
@@ -34,8 +31,7 @@ var GAME = (function () {
         
         // Create and configure display
         display = new HYNE(640, 360)
-            .appendTo("game")
-            .setFPS(60);
+            .appendTo("game");
         
         // Set update and render methods
         display.setUpdate(updateWrapper);

@@ -93,6 +93,11 @@ var LEVEL = (function() {
         var tilex = Math.floor((yacopu.x + xoffset) / 32);
         var tiley = Math.floor((yacopu.y + yoffset) / 32);
         
+        // If the tiles are outside the level boundaries, return a default solid tile
+        if ((tilex < 0) || (tiley < 0) || (tilex > this.tiles.length) || (tiley > ROWS)) {
+            return tileProperties[1];
+        }
+        
         var tileId = this.tiles[tilex][tiley];
         
         return tileProperties[tileId];

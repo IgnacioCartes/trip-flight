@@ -52,7 +52,7 @@
         
         // Define new environment for this instance
         this.__id = ENV.length;
-        this.interval = null;
+        this.animation = null;
         
         var newENV = {};
         
@@ -124,6 +124,7 @@
         return this;
     };
     
+    /*
     HYNE.prototype.setFPS = function(fps) {
         if (typeof fps !== 'number') {
             this.error("You must specify a number!");
@@ -132,6 +133,7 @@
         ENV[this.__id].fps = fps;
         return this;
     };
+    */
     
     HYNE.prototype.setUpdate = function(updateMethod) {
         if (typeof updateMethod !== 'function') {
@@ -157,18 +159,21 @@
             this.warn("on render method has not been defined!");
         };
         
-        this.interval = setInterval(
+        this.animation = window.requestAnimationFrame(frame.bind(this, ENV[this.__id]));
+        //    frame(ENV[this.__id]);
+        //});
+                                                      /*
             frame,
             (1000 / ENV[this.__id].fps),
             ENV[this.__id]
-        );
+        );*/
         return this;
     };
     
     HYNE.prototype.stop = function() {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
+        if (this.animation) {
+            window.cancelAnimationFrame(this.animation);
+            this.animation = null;
         }
         return this;
     };
@@ -211,6 +216,9 @@
         env.render.bind(env.game, env.canvas.bufferCtx)();
         
         env.input.touch.active = false;
+        
+        // rerequest a new animation frame
+        if (this.animation) window.requestAnimationFrame(frame.bind(this, env));
     };
     
     
