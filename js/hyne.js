@@ -10,14 +10,17 @@
  *
  *          Create new display object. This initializes the canvas and its buffer.
  *
+ *
  *      display.appendTo(id);
  *
  *          Appends the main canvas inside the element with a specific id.
+ *
  *
  *      display.setUpdate(method);
  *
  *          Passes an update function to be called on every frame - passes inputs to the method as
  argument.
+ *
  *
  *      display.setRender(method);
  *
@@ -31,6 +34,7 @@
  *
  *          Starts running the interval that will update the canvas n times per second (according to 
  specified FPS).
+ *
  *
  *      display.stop();
  *
@@ -62,9 +66,41 @@
         newENV.canvas.mainCtx = newENV.canvas.main.getContext('2d');
         newENV.canvas.bufferCtx = newENV.canvas.buffer.getContext('2d');
         
+        newENV.canvas.main.dataset.id = this.__id;
+        
         newENV.fps = 60;
         
         newENV.ticks = 0;
+        
+        newENV.input = {
+            touch: {}
+        };
+        
+        // Create touch listeners
+        newENV.canvas.main.addEventListener('mousedown', function (e) {
+            ENV[this.dataset.id].input.touch = {
+                x: e.x,
+                y: e.y,
+                tick: ENV[this.dataset.id].ticks,
+                active: true
+            };
+            //console.log(e);
+        });
+        
+        /*
+        ['mousedown', 'mouseup', 'mousemove'].forEach(
+            function(value) {
+                newENV.canvas.main.addEventListener(value, function (e) {
+                    
+                    //touch.event = e;
+                    console.log(this.dataset.id);
+                    ENV[this.dataset.id].input.touch = e.touches;
+                    
+                });
+            }
+        );
+        */
+        
         
         // Push new environment
         ENV.push(newENV);
@@ -167,13 +203,14 @@
     };
     
     function frame(env) {
+        env.canvas.mainCtx.clearRect(0, 0, env.width, env.height);
         env.canvas.mainCtx.drawImage(env.canvas.buffer, 0, 0);
         env.ticks++;
         //env.render(env.canvas.bufferCtx);
-        env.update.bind(env.game, env.canvas.bufferCtx)();
+        env.update.bind(env.game, env.input)();
         env.render.bind(env.game, env.canvas.bufferCtx)();
         
-        //console.log(env);
+        env.input.touch.active = false;
     };
     
     

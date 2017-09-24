@@ -1,4 +1,4 @@
-var game = (function () {
+var GAME = (function () {
     'use strict';
     
     
@@ -15,12 +15,14 @@ var game = (function () {
     // level layout - managed by level.js
     var level;
     
-    // game mode - manages different scenes
+    // game mode - different scenes within the game
     var mode;
     
-    // this
+    // references this object
     var game;
     
+    // scrolling variables
+    var scrollX = 0;
     
     
     
@@ -40,8 +42,8 @@ var game = (function () {
         display.setRender(renderWrapper);
         
         // Set initial mode
-        mode = "intro";
-    
+        set.play(1);
+        
         // Start the display
         display.run();
         
@@ -49,12 +51,44 @@ var game = (function () {
     
     
     /*
+     * mode initializers
+     */
+    var set = {
+        intro: function() {
+            mode = "intro";
+            
+        },
+        play: function(levelId) {
+            level = new LEVEL(levelId);
+            yacopu = new YACOPU();
+            yacopu.level = level;
+            mode = "play";
+            console.log(yacopu);
+            
+        },
+        results: function() {
+            mode = "results";
+            
+        },
+    }
+    
+    
+    /*
      * update methods
      */
     var update = {
         intro: function(input) {
+            
         },
         play: function(input) {
+            // update yacopu movement
+            yacopu.update(display.getTicks());
+            
+            // flap if a touch occured on this frame
+            if (input.touch.active) yacopu.flap();
+            
+            // scroll screen if needed
+            if ((yacopu.x - scrollX) > 240) scrollX = Math.floor(yacopu.x - 240);
             
         },
         results: function(input) {
@@ -70,7 +104,8 @@ var game = (function () {
             
         },
         play: function(context) {
-            
+            level.render(context, scrollX);
+            yacopu.render(context, scrollX);
         },
         results: function(context) {
             
@@ -81,14 +116,10 @@ var game = (function () {
      * wrapper methods
      */
     
-    function updateWrapper(context) {
+    function updateWrapper(input) {
         
-        update[mode].bind({})();
-        
-        if (this.getTicks() === 200) {
-            console.log(context);
-            display.stop();
-        }
+        update[mode](input);
+        if (this.getTicks() === 600) { display.stop(); }
         
     };
     
@@ -97,7 +128,7 @@ var game = (function () {
         // clear buffer before calling individual function for each mode
         this.clearBuffer();
         
-        render[mode].bind(this, context)();
+        render[mode](context);
         
         document.getElementById("log").innerHTML = this.getTicks();
         
