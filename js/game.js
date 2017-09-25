@@ -15,12 +15,14 @@ var GAME = (function () {
     // level layout - managed by level.js
     var level;
     
+    // particles - used to show flashy things on screen tap
+    var particles = [];
+    
     // game mode - different scenes within the game
     var mode;
     
     // scrolling variables
     var scrollX = 0;
-    
     
     
     
@@ -31,11 +33,11 @@ var GAME = (function () {
         
         // Create and configure display
         display = new HYNE(640, 360)
-            .appendTo("game");
+            .appendTo("div-game");
         
         // Set update and render methods
-        display.setUpdate(updateWrapper);
-        display.setRender(renderWrapper);
+        display.setUpdate(updateWrapper)
+            .setRender(renderWrapper);
         
         // Set initial mode
         set.play(1);
@@ -59,7 +61,6 @@ var GAME = (function () {
             yacopu = new YACOPU();
             yacopu.level = level;
             mode = "play";
-            console.log(yacopu);
             
         },
         results: function() {
@@ -81,7 +82,10 @@ var GAME = (function () {
             yacopu.update(display.getTicks());
             
             // flap if a touch occured on this frame
-            if (input.touch.active) yacopu.flap();
+            if (input.touch.active) {
+                yacopu.flap();
+                console.log(input.touch);
+            }
             
             // scroll screen if needed
             if ((yacopu.x - scrollX) > 240) scrollX = Math.floor(yacopu.x - 240);
@@ -114,22 +118,29 @@ var GAME = (function () {
     
     function updateWrapper(input) {
         
+        // call update method depending on mode
         update[mode](input);
+        
+        // end at 600 ticks (10~ seconds)
         if (this.getTicks() === 600) { display.stop(); }
         
-    };
+    }
     
     function renderWrapper(context) {
         
         // clear buffer before calling individual function for each mode
         this.clearBuffer();
         
+        // call render method depending on mode
         render[mode](context);
         
+        // show ticks on div
         document.getElementById("log").innerHTML = this.getTicks();
         
     }
     
+    
+    // Return object to global namespace
     return game;
     
 }());

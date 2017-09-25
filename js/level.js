@@ -1,7 +1,9 @@
 var LEVEL = (function() {
     'use strict';
     
-    /* Definition of constants and global variables */
+    /*
+     * Global variables and constants
+     */
     const ROWS = 11;
     const COLS_PER_SCREEN = 20;
     
@@ -51,7 +53,7 @@ var LEVEL = (function() {
         
         // Determine which slices to render and offset
         var firstSlice = Math.floor(scrollX / (32 * COLS_PER_SCREEN));
-        var xOffset = scrollX % (32 * COLS_PER_SCREEN);
+        var xOffset = 2 * Math.floor((scrollX % (32 * COLS_PER_SCREEN)) / 2);
         
         // Have these slices been prerendered? Do so if needed
         if (renderedSlices.indexOf(firstSlice) === -1) prerenderSliceToBuffer(firstSlice, this.tiles);
