@@ -61,6 +61,8 @@ var YACOPU = (function() {
         this.flying = false;
         this.crash = false;
         
+        this.onGround = 0;
+        
         this.level = null;
         
         this.speedX = 0;
@@ -151,7 +153,7 @@ var YACOPU = (function() {
             if (this.speedY > 0) this.speedY = 0;
             if (this.speedX > 0) this.speedX--;
             this.y = 32 * parseInt(this.y / 32);
-            
+            this.onGround++;
         };
         
         // If hitting an obstacle face first, stop fully and "snap to grid"
