@@ -85,10 +85,12 @@
                 active: true,
                 click: true
             };
+            e.preventDefault();
         });
         
         newENV.canvas.main.addEventListener('mouseup', function (e) {
             ENV[this.dataset.id].input.touch.active = false;
+            e.preventDefault();
         });
         
         /*

@@ -6,17 +6,17 @@ GAME.MODE = (function(mode) {
      * GAME MODE VARIABLES
      */
     
-    // level
-    var level;
-    
-    // Buttons
-    var buttons = {};
+    // module
+    var title = {};
     
     // reference to main game object
     var game;
     
-    // module
-    var title = {};
+    // level layout - managed by level.js
+    var level;
+    
+    // Buttons
+    var buttons = {};
     
     
     
