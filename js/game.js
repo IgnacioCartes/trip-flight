@@ -21,7 +21,9 @@ var GAME = (function () {
     // game mode - different scenes within the game
     var mode;
     
-    // scrolling variables
+    // game variables
+    var introMode = "intro";
+    // scrolling
     var scrollX = 0;
     
     
@@ -40,7 +42,7 @@ var GAME = (function () {
             .setRender(renderWrapper);
         
         // Set initial mode
-        set.play(1);
+        set.intro();
         
         // Start the display
         display.run();
@@ -53,8 +55,9 @@ var GAME = (function () {
      */
     var set = {
         intro: function() {
+            level = new LEVEL(1);
             mode = "intro";
-            
+            introMode = "intro";
         },
         play: function(levelId) {
             level = new LEVEL(levelId);
@@ -75,6 +78,11 @@ var GAME = (function () {
      */
     var update = {
         intro: function(input) {
+            if (input.touch.active) set.play(1);
+            
+            if (introMode === "intro") {
+                
+            };
             
         },
         play: function(input) {
@@ -90,6 +98,9 @@ var GAME = (function () {
             // scroll screen if needed
             if ((yacopu.x - scrollX) > 240) scrollX = Math.floor(yacopu.x - 240);
             
+            // Make sure we don't scroll TOO much though
+            if (scrollX > level.rightBound) scrollX = level.rightBound;
+            
         },
         results: function(input) {
             
@@ -101,6 +112,7 @@ var GAME = (function () {
      */
     var render = {
         intro: function(context) {
+            level.render(context, scrollX);
             
         },
         play: function(context) {
@@ -122,7 +134,7 @@ var GAME = (function () {
         update[mode](input);
         
         // end at 600 ticks (10~ seconds)
-        if (this.getTicks() === 600) { display.stop(); }
+        //if (this.getTicks() === 600) { display.stop(); }
         
     }
     

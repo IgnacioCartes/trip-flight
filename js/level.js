@@ -33,11 +33,14 @@ var LEVEL = (function() {
      */
     var level = function(id) {
         // Create a new level structure
-        this.tiles = createNewLevel(id);
+        createNewLevel.bind(this, id)();
         
         // Create screenbuffers if this is the first time a level is being instantiated
         if (screenBuffers === undefined) createScreenBuffers();
         renderedSlices = [-1, -1];
+        
+        this.rightBound = (this.tiles.length - COLS_PER_SCREEN) * 32 - 2;
+        console.log(this);
         
     };
     
@@ -96,7 +99,7 @@ var LEVEL = (function() {
         var tiley = Math.floor((yacopu.y + yoffset) / 32);
         
         // If the tiles are outside the level boundaries, return a default solid tile
-        if ((tilex < 0) || (tiley < 0) || (tilex > this.tiles.length) || (tiley > ROWS)) {
+        if ((tilex < 0) || (tiley < 0) || (tilex >= this.tiles.length) || (tiley >= ROWS)) {
             return tileProperties[1];
         }
         
@@ -109,23 +112,23 @@ var LEVEL = (function() {
     
     
     /*
-     * private array[] createNewLevel(id)
+     * private void createNewLevel(id)
      *
      *  creates and returns a new level based on the id properties, used on the level constructor
      *
      */
     function createNewLevel(id) {
         
-        var tiles = [];
+        this.tiles = [];
         
         // quickly makeshift a new level
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) tiles.push([0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]);
         
-        return tiles;
-        
+        // goal line
+        this.goal = 70;
     };
     
     

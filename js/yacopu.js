@@ -60,6 +60,7 @@ var YACOPU = (function() {
         this.alive = true;
         this.flying = false;
         this.crash = false;
+        this.goal = false;
         
         this.onGround = 0;
         
@@ -175,6 +176,13 @@ var YACOPU = (function() {
         this.x += (this.speedX / 8);
         this.y += (this.speedY / 8);
         
+        // Check if goal has been reached
+        if (!this.goal) {
+            if (this.x >= (this.level.goal * 32)) {
+                console.log("GOAL! " + this.x.toString());
+                this.goal = true;
+            };
+        };
         
         // Determine proper animation
         if (tileUnder.solid) {
@@ -209,6 +217,9 @@ var YACOPU = (function() {
      *
      */
     yacopu.prototype.flap = function () {
+        
+        // If the goal has been reached already, ignore
+        if (this.goal) return null;
         
         // If standing on ground, give uncapped X acceleration
         if (this.level.tileAt(this, 16, 32).solid) this.speedX += 6;
