@@ -1,4 +1,4 @@
-var LEVEL = (function() {
+GAME.LEVEL = (function() {
     'use strict';
     
     /*
@@ -39,8 +39,8 @@ var LEVEL = (function() {
         if (screenBuffers === undefined) createScreenBuffers();
         renderedSlices = [-1, -1];
         
+        // Calculate rightmost bound, to prevent scrolling past this point
         this.rightBound = (this.tiles.length - COLS_PER_SCREEN) * 32 - 2;
-        console.log(this);
         
     };
     

@@ -82,9 +82,13 @@
                 x: e.x,
                 y: e.y,
                 tick: ENV[this.dataset.id].ticks,
-                active: true
+                active: true,
+                click: true
             };
-            //console.log(e);
+        });
+        
+        newENV.canvas.main.addEventListener('mouseup', function (e) {
+            ENV[this.dataset.id].input.touch.active = false;
         });
         
         /*
@@ -215,7 +219,7 @@
         env.update.bind(env.game, env.input)();
         env.render.bind(env.game, env.canvas.bufferCtx)();
         
-        env.input.touch.active = false;
+        env.input.touch.click = false;
         
         // rerequest a new animation frame
         if (this.animation) window.requestAnimationFrame(frame.bind(this, env));

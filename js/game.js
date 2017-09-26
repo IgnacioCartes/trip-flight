@@ -21,6 +21,9 @@ var GAME = (function () {
     // game mode - different scenes within the game
     var mode;
     
+    // buttons
+    var button = {};
+    
     // game variables
     var introMode = "intro";
     // scrolling
@@ -55,13 +58,14 @@ var GAME = (function () {
      */
     var set = {
         intro: function() {
-            level = new LEVEL(1);
+            level = new GAME.LEVEL(1);
+            button.intro = new GAME.BUTTON(16, 16, 32, 32);
             mode = "intro";
             introMode = "intro";
         },
         play: function(levelId) {
-            level = new LEVEL(levelId);
-            yacopu = new YACOPU();
+            level = new GAME.LEVEL(levelId);
+            yacopu = new GAME.YACOPU();
             yacopu.level = level;
             mode = "play";
             
@@ -78,7 +82,8 @@ var GAME = (function () {
      */
     var update = {
         intro: function(input) {
-            if (input.touch.active) set.play(1);
+            button.intro.update(input);
+            if (button.intro.click) console.log("click!");//set.play(1);
             
             if (introMode === "intro") {
                 
@@ -113,6 +118,7 @@ var GAME = (function () {
     var render = {
         intro: function(context) {
             level.render(context, scrollX);
+            button.intro.render(context, "#FF0000");
             
         },
         play: function(context) {

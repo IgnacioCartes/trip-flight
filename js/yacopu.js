@@ -1,4 +1,4 @@
-var YACOPU = (function() {
+GAME.YACOPU = (function() {
     'use strict';
     
     /*
