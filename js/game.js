@@ -8,31 +8,17 @@ var GAME = (function () {
     
     // (a very basic) display and timing module - managed by hyne.js
     var display;
-
-    // yacopu - managed by yacopu.js
-    var yacopu;
-    
-    // level layout - managed by level.js
-    var level;
-    
-    // particles - used to show flashy things on screen tap
-    var particles = [];
     
     // game mode - different scenes within the game
     var mode;
     
-    // buttons
-    var button = {};
     
-    // game variables
-    var introMode = "intro";
-    // scrolling
-    var scrollX = 0;
-    
-    
-    
+
     /*
-     * game constructor - initialize display and game objects
+     * public constructor()
+     *
+     *  initializes the game and its main elements (display and game modes)
+     *
      */
     var game = function () {
         
@@ -45,7 +31,8 @@ var GAME = (function () {
             .setRender(renderWrapper);
         
         // Set initial mode
-        set.intro();
+        //set.intro();
+        this.setMode("TITLE");
         
         // Start the display
         display.run();
@@ -53,109 +40,75 @@ var GAME = (function () {
     };
     
     
+    
     /*
-     * mode initializers
+     * public void .setMode(newMode, argsObj)
+     *
+     *  sets a new game mode, passing an object containing custom arguments to the new game mode
+     *
      */
-    var set = {
-        intro: function() {
-            level = new GAME.LEVEL(1);
-            button.intro = new GAME.BUTTON(16, 16, 32, 32);
-            mode = "intro";
-            introMode = "intro";
-        },
-        play: function(levelId) {
-            level = new GAME.LEVEL(levelId);
-            yacopu = new GAME.YACOPU();
-            yacopu.level = level;
-            mode = "play";
-            
-        },
-        results: function() {
-            mode = "results";
-            
-        },
-    }
+    game.prototype.setMode = function (newMode, argsObj) {
+        
+        console.log("setting mode " + newMode);
+        
+        if (GAME.MODE[newMode]) {
+            GAME.MODE[newMode].set(this, argsObj);
+            mode = newMode;
+        };
+        
+    };
+    
     
     
     /*
-     * update methods
+     * public number .getTicks()
+     *
+     *  gets number of elapsed ticks from display object
+     *
      */
-    var update = {
-        intro: function(input) {
-            button.intro.update(input);
-            if (button.intro.click) console.log("click!");//set.play(1);
-            
-            if (introMode === "intro") {
-                
-            };
-            
-        },
-        play: function(input) {
-            // update yacopu movement
-            yacopu.update(display.getTicks());
-            
-            // flap if a touch occured on this frame
-            if (input.touch.active) {
-                yacopu.flap();
-                console.log(input.touch);
-            }
-            
-            // scroll screen if needed
-            if ((yacopu.x - scrollX) > 240) scrollX = Math.floor(yacopu.x - 240);
-            
-            // Make sure we don't scroll TOO much though
-            if (scrollX > level.rightBound) scrollX = level.rightBound;
-            
-        },
-        results: function(input) {
-            
-        },
-    }
+    game.prototype.getTicks = function () {
+        return display.getTicks();
+    };
+    
+    
     
     /*
-     * render methods
+     * private void updateWrapper(input)
+     *
+     *  function passed to display, called on each frame to handle update of game objects
+     *
      */
-    var render = {
-        intro: function(context) {
-            level.render(context, scrollX);
-            button.intro.render(context, "#FF0000");
-            
-        },
-        play: function(context) {
-            level.render(context, scrollX);
-            yacopu.render(context, scrollX);
-        },
-        results: function(context) {
-            
-        },
-    }
-    
-    /*
-     * wrapper methods
-     */
-    
     function updateWrapper(input) {
         
         // call update method depending on mode
-        update[mode](input);
+        GAME.MODE[mode].update(input);
         
         // end at 600 ticks (10~ seconds)
         //if (this.getTicks() === 600) { display.stop(); }
         
     }
     
+    
+    
+    /*
+     * private void renderWrapper(context)
+     *
+     *  function passed to display, called on each frame to display objects on game canvas
+     *
+     */
     function renderWrapper(context) {
         
         // clear buffer before calling individual function for each mode
         this.clearBuffer();
         
         // call render method depending on mode
-        render[mode](context);
+        GAME.MODE[mode].render(context);
         
         // show ticks on div
         document.getElementById("log").innerHTML = this.getTicks();
         
     }
+    
     
     
     // Return object to global namespace

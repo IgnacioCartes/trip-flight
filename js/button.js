@@ -13,8 +13,13 @@ GAME.BUTTON = (function() {
         this.width = width;
         this.height = height;
         
+        this.visible = true;
+        this.interactivity = true;
+        
         this.active = false;
         this.click = false;
+        
+        this.image = null;
     };
     
     
@@ -28,17 +33,24 @@ GAME.BUTTON = (function() {
      */
     button.prototype.render = function (context, strokeStyle) {
         
-        if (this.image) {
-            
-        };
+        // Ignore is button visibility is set to false
+        if (!this.visible) return null;
         
+        // Draw image if one was added to the button object
+        if (this.image && (typeof this.image === "object")) {
+            if (this.image.complete) {
+                context.drawImage(this.image, this.x, this.y);
+            }
+        }
+        
+        // Draw box if a strokestyle was provided
         if (strokeStyle) {
             var storeStrokeStyle = context.strokeStyle;
             context.strokeStyle = strokeStyle;
             context.strokeRect(this.x, this.y, this.width, this.height);
             
             context.strokeStyle = storeStrokeStyle;
-        };
+        }
 
     };
     
@@ -51,6 +63,9 @@ GAME.BUTTON = (function() {
      *
      */
     button.prototype.update = function (input) {
+        
+        // Ignore if button interaction is disabled
+        if (!this.interactivity) return null;
         
         // Only update if mouse is over button, otherwise we don't care
         if ((input.touch.x >= this.x)
