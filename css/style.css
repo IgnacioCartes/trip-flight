@@ -1,4 +1,9 @@
-body, html {
+html {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+body {
     margin: 0;
     padding: 0
 }
