@@ -24,7 +24,7 @@ var GAME = (function () {
         
         // Create and configure display
         display = new HYNE(640, 360)
-            .appendTo("div-game");
+            .appendTo(document.body);
         
         // Set update and render methods
         display.setUpdate(updateWrapper)
@@ -105,7 +105,7 @@ var GAME = (function () {
         GAME.MODE[mode].render(context);
         
         // show ticks on div
-        document.getElementById("log").innerHTML = this.getTicks();
+        //document.getElementById("log").innerHTML = this.getTicks();
         
     }
     

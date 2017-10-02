@@ -34,6 +34,7 @@ GAME.LEVEL = (function() {
     var level = function(id) {
         // Create a new level structure
         createNewLevel.bind(this, id)();
+        this.id = id;
         
         // Create screenbuffers if this is the first time a level is being instantiated
         if (screenBuffers === undefined) createScreenBuffers();
@@ -78,6 +79,13 @@ GAME.LEVEL = (function() {
          * and it will be drawn in front of slice 1
          * and so on
          */
+        
+        // Determine whether or not to render the goal line
+        var goalPosition = (this.goal * 32) - scrollX + 31;
+        if ((goalPosition > 0) && (goalPosition < 640)) {
+            context.fillRect(goalPosition - 1, 0, 2, 352);
+        }
+        
         
         context.fillStyle = "#889988";
         context.fillText(firstSlice.toString() + ", " + (firstSlice + 1).toString(), 0, 64);

@@ -35,13 +35,13 @@ GAME.MODE = (function(mode) {
         level = new GAME.LEVEL(0);
             
         // Create and position buttons
-        buttons.stage_select = new GAME.BUTTON(320 - 96, 192, 192, 32);
+        buttons.stage_select = new GAME.BUTTON(320 - 96, 176, 192, 32);
         buttons.stage_select.image = new Image();
             
-        buttons.best_times = new GAME.BUTTON(320 - 96, 240, 192, 32);
+        buttons.best_times = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.best_times.image = new Image();
             
-        buttons.about = new GAME.BUTTON(320 - 96, 288, 192, 32);
+        buttons.about = new GAME.BUTTON(320 - 96, 272, 192, 32);
         buttons.about.image = new Image();
         
     };
@@ -61,7 +61,6 @@ GAME.MODE = (function(mode) {
             
         // React to button
         if (buttons.stage_select.click) game.setMode("PLAY", { level: 1 });
-        if (buttons.about.click) console.log("ABOUT");
         
     };
     

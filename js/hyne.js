@@ -122,10 +122,15 @@
     // Public methods
     HYNE.prototype.appendTo = function(element) {
         var el;
-        if ((el = document.getElementById(element)) === undefined) {
-            this.error("Element \"" + element + "\" was not found!");
-            return null;
-        };
+        
+        if (typeof element === "string") {
+            if ((el = document.getElementById(element)) === undefined) {
+                this.error("Element \"" + element + "\" was not found!");
+                return null;
+            }
+        } else if ((typeof element === "object") && (element.nodeType)) {
+            el = element;
+        }
         el.appendChild(ENV[this.__id].canvas.main);
         return this;
     };

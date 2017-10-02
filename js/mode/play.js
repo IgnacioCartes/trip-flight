@@ -82,7 +82,6 @@ GAME.MODE = (function(mode) {
         // flap if a touch occured on this frame
         if (input.touch.click) {
             yacopu.flap();
-            console.log(input.touch);
         }
             
         // scroll screen if needed
@@ -109,8 +108,10 @@ GAME.MODE = (function(mode) {
         level.render(context, scrollX);
         yacopu.render(context, scrollX);
         
+        var roundraceTime = Math.round((raceTime / 60) * 100) / 100;
+        
         context.fillStyle = "#3377BB";
-        context.fillText((raceTime / 60).toString(), 0, 360);
+        context.fillText((roundraceTime).toString(), 512, 16);
         
     };
     

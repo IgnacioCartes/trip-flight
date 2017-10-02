@@ -123,6 +123,13 @@ GAME.YACOPU = (function() {
         context.fillText("speed: " + this.speedX.toString() + ", " + this.speedY.toString(), 0, 16);
         context.fillText("position: " + this.x.toString() + ", " + this.y.toString(), 0, 32);
         
+        // speed
+        if (this.speedX > 0) {
+            context.fillStyle = "#A03010";
+            context.fillRect(0, 352, Math.floor(this.speedX * 8), 359);
+        }
+        
+        
     };
     
     
@@ -179,7 +186,7 @@ GAME.YACOPU = (function() {
         // Check if goal has been reached
         if (!this.goal) {
             if (this.x >= (this.level.goal * 32)) {
-                console.log("GOAL! " + this.x.toString());
+                console.log("GOAL! " + (this.x - (this.level.goal * 32)).toString());
                 this.goal = true;
             };
         };
