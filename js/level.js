@@ -10,18 +10,32 @@ GAME.LEVEL = (function() {
     // buffers and their contexts
     var screenBuffers, screenContexts, renderedSlices;
     
-    // tile properties
-    var tileProperties = [
-        {
+    
+    // tile base properties
+    var tileBaseProp = {
+        "empty": {
             color: "#EEEEEE",
             solid: false
         },
+        "solid":
         {
             color: "#111111",
-            solid: true
+            solid: true,
+        },
+        "slippery":
+        {
+            color: "#AABBEE",
+            solid: true,
+            slippery: true
         }
-    ];
+    };
     
+    // tile properties (these should be set for each level)
+    var tileProperties = [
+        tileBaseProp.empty,
+        tileBaseProp.solid,
+        tileBaseProp.slippery
+    ];
     
     
     /*
@@ -130,10 +144,10 @@ GAME.LEVEL = (function() {
         this.tiles = [];
         
         // quickly makeshift a new level
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 2]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1]);
         
         // goal line
         this.goal = 70;

@@ -118,21 +118,6 @@
             e.preventDefault();
         }
         
-        /*
-        ['mousedown', 'mouseup', 'mousemove'].forEach(
-            function(value) {
-                newENV.canvas.main.addEventListener(value, function (e) {
-                    
-                    //touch.event = e;
-                    console.log(this.dataset.id);
-                    ENV[this.dataset.id].input.touch = e.touches;
-                    
-                });
-            }
-        );
-        */
-        
-        
         // Push new environment
         ENV.push(newENV);
         
@@ -211,13 +196,6 @@
         };
         
         this.animation = window.requestAnimationFrame(frame.bind(this, ENV[this.__id]));
-        //    frame(ENV[this.__id]);
-        //});
-                                                      /*
-            frame,
-            (1000 / ENV[this.__id].fps),
-            ENV[this.__id]
-        );*/
         return this;
     };
     

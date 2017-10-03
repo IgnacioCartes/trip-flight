@@ -159,7 +159,7 @@ GAME.YACOPU = (function() {
         // if standing on ground, cancel Y acceleration if positive, deaccelerate in X and "snap to grid"
         if (tileUnder.solid) {
             if (this.speedY > 0) this.speedY = 0;
-            if (this.speedX > 0) this.speedX--;
+            if (this.speedX > 0 && !tileUnder.slippery) this.speedX--;
             this.y = 32 * parseInt(this.y / 32);
             this.onGround++;
         };
