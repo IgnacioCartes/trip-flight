@@ -104,6 +104,9 @@ var GAME = (function () {
         // call render method depending on mode
         GAME.MODE[mode].render(context);
         
+        // Display screen resolution
+        context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
+        
         // show ticks on div
         //document.getElementById("log").innerHTML = this.getTicks();
         

@@ -56,6 +56,7 @@
         
         var newENV = {};
         
+        // Environment variables
         newENV.game = this;
         newENV.width = width;
         newENV.height = height;
@@ -66,7 +67,9 @@
         newENV.canvas.mainCtx = newENV.canvas.main.getContext('2d');
         newENV.canvas.bufferCtx = newENV.canvas.buffer.getContext('2d');
         
-        newENV.canvas.main.dataset.id = this.__id;
+        newENV.touchScaling = {x: 1, y: 1};
+        
+        newENV.canvas.main.id = this.__id;
         
         newENV.fps = 60;
         
@@ -77,21 +80,43 @@
         };
         
         // Create touch listeners
-        newENV.canvas.main.addEventListener('mousedown', function (e) {
-            ENV[this.dataset.id].input.touch = {
+        if (navigator.isCocoonJS) {
+            newENV.canvas.main.addEventListener('touchstart', touchstart);
+            newENV.canvas.main.addEventListener('touchend', touchend);
+        } else {
+            newENV.canvas.main.addEventListener('mousedown', mousedown);
+            newENV.canvas.main.addEventListener('mouseup', touchend);
+        }
+        
+        // mouse/touch functions
+        function mousedown(e) {
+            ENV[this.id].input.touch = {
                 x: e.x,
                 y: e.y,
-                tick: ENV[this.dataset.id].ticks,
+                tick: ENV[this.id].ticks,
                 active: true,
                 click: true
             };
             e.preventDefault();
-        });
+        }
         
-        newENV.canvas.main.addEventListener('mouseup', function (e) {
-            ENV[this.dataset.id].input.touch.active = false;
+        function touchstart(e) {
+            ENV[this.id].input.touch = {
+                x: e.touches[0].pageX * ENV[this.id].touchScaling.x,
+                y: e.touches[0].pageY * ENV[this.id].touchScaling.y,
+                tick: ENV[this.id].ticks,
+                active: true,
+                click: true
+            };
+            //console.log(e.touches[0].pageX * ENV[this.id].touchScaling.x)
             e.preventDefault();
-        });
+        }
+        
+        
+        function touchend(e) {
+            ENV[this.id].input.touch.active = false;
+            e.preventDefault();
+        }
         
         /*
         ['mousedown', 'mouseup', 'mousemove'].forEach(
@@ -131,7 +156,22 @@
         } else if ((typeof element === "object") && (element.nodeType)) {
             el = element;
         }
+        
+        // Update for Cocoon - stretch canvas to screen, adjust scaling
+        if (navigator.isCocoonJS) {
+            ENV[this.__id].touchScaling.x = ENV[this.__id].width / window.innerWidth;
+            ENV[this.__id].touchScaling.y = ENV[this.__id].height / window.innerHeight;
+            
+            //console.log(ENV[this.__id].touchScaling.x.toString());
+            //console.log(ENV[this.__id].touchScaling.y.toString());
+            
+            ENV[this.__id].canvas.main.style.width = window.innerWidth.toString() + "px";
+            ENV[this.__id].canvas.main.style.height = window.innerHeight.toString() + "px";
+        }
+            
         el.appendChild(ENV[this.__id].canvas.main);
+        
+        
         return this;
     };
     

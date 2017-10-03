@@ -4,8 +4,8 @@ GAME.LEVEL = (function() {
     /*
      * Global variables and constants
      */
-    const ROWS = 11;
-    const COLS_PER_SCREEN = 20;
+    var ROWS = 11;
+    var COLS_PER_SCREEN = 20;
     
     // buffers and their contexts
     var screenBuffers, screenContexts, renderedSlices;
