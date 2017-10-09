@@ -4,7 +4,7 @@ GAME.YACOPU = (function() {
     /*
      * Global variables and constants
      */
-    var image, imageLoaded = false;
+    var image;
     
     // animation loops
     var animations = {
@@ -113,7 +113,7 @@ GAME.YACOPU = (function() {
         var thisx = 2 * Math.round((this.x - scrollX) / 2);
         var thisy = 2 * Math.round((this.y) / 2) + 2;
         
-        // Draw yacopu 
+        // Draw yacopu
         var animPos = this.animation.frame * 32;
         context.drawImage(image, animPos, 0, 32, 32, thisx, thisy, 32, 32);
         
@@ -164,16 +164,16 @@ GAME.YACOPU = (function() {
             this.onGround++;
         };
         
+        // If hitting an obstacle with head, cancel upwards velocity and "snap to grid"
+        if (tileAbove.solid) {
+            this.speedY = 0;
+            this.y = 32 * Math.round((this.y / 32));
+        };
+        
         // If hitting an obstacle face first, stop fully and "snap to grid"
         if (tileAhead.solid) {
             this.speedX = 0;
             this.x = 32 * parseInt(this.x / 32);
-        };
-        
-        // If hitting an obstacle with head, cancel upwards velocity and "snap to grid"
-        if (tileAbove.solid) {
-            this.speedY = 0;
-            this.y = 32 * parseInt(this.y / 32);
         };
         
         // Vertical movement if flying and not on ground (simulates holding right)
