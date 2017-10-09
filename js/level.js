@@ -10,6 +10,9 @@ GAME.LEVEL = (function() {
     // buffers and their contexts
     var screenBuffers, screenContexts, renderedSlices;
     
+    // images
+    var image;
+    
     
     // tile base properties
     var tileBaseProp = {
@@ -31,11 +34,7 @@ GAME.LEVEL = (function() {
     };
     
     // tile properties (these should be set for each level)
-    var tileProperties = [
-        tileBaseProp.empty,
-        tileBaseProp.solid,
-        tileBaseProp.slippery
-    ];
+    var tileProperties;
     
     
     /*
@@ -69,30 +68,37 @@ GAME.LEVEL = (function() {
      */
     level.prototype.render = function(context, scrollX) {
         
-        // Determine which slices to render and offset
-        var firstSlice = Math.floor(scrollX / (32 * COLS_PER_SCREEN));
-        var xOffset = 2 * Math.floor((scrollX % (32 * COLS_PER_SCREEN)) / 2);
-        
-        // Have these slices been prerendered? Do so if needed
-        if (renderedSlices.indexOf(firstSlice) === -1) prerenderSliceToBuffer(firstSlice, this.tiles);
-        if (renderedSlices.indexOf(firstSlice + 1) === -1) prerenderSliceToBuffer(firstSlice + 1, this.tiles);
-        
-        // Get which buffer corresponds to which slice
-        var firstBuffer = renderedSlices.indexOf(firstSlice);
-        var secondBuffer = renderedSlices.indexOf(firstSlice + 1);
-        
-        // Draw buffers to "main" canvas context with the right offset
-        context.drawImage(screenBuffers[firstBuffer], 0 - xOffset, 0);
-        context.drawImage(screenBuffers[secondBuffer], (COLS_PER_SCREEN * 32) - xOffset, 0);
-        
-        /*
-         * the way this works is we have two buffers we move one in front of eachother as the screen scrolls
-         * each "slice" is a 20x11 tilemap
-         * initially there will always be [0, 1] slices drawn
-         * then as the screen scroll enough, slice 2 will be prerendered instead of slice 0
-         * and it will be drawn in front of slice 1
-         * and so on
-         */
+        // We want to wait until level image is loaded before rendering the actual level
+        if (image.complete) {
+
+            // Determine which slices to render and offset
+            var firstSlice = Math.floor(scrollX / (32 * COLS_PER_SCREEN));
+            var xOffset = 2 * Math.floor((scrollX % (32 * COLS_PER_SCREEN)) / 2);
+
+            // Have these slices been prerendered? Do so if needed
+            if (renderedSlices.indexOf(firstSlice) === -1) prerenderSliceToBuffer(firstSlice, this.tiles);
+            if (renderedSlices.indexOf(firstSlice + 1) === -1) prerenderSliceToBuffer(firstSlice + 1, this.tiles);
+
+            // Get which buffer corresponds to which slice
+            var firstBuffer = renderedSlices.indexOf(firstSlice);
+            var secondBuffer = renderedSlices.indexOf(firstSlice + 1);
+
+            // Draw buffers to "main" canvas context with the right offset
+            context.drawImage(screenBuffers[firstBuffer], 0 - xOffset, 0);
+            context.drawImage(screenBuffers[secondBuffer], (COLS_PER_SCREEN * 32) - xOffset, 0);
+
+            /*
+             * the way this works is we have two buffers we move one in front of eachother as the screen scrolls
+             * each "slice" is a 20x11 tilemap
+             * initially there will always be [0, 1] slices drawn
+             * then as the screen scroll enough, slice 2 will be prerendered instead of slice 0
+             * and it will be drawn in front of slice 1
+             * and so on
+             */
+            
+            context.fillText(firstSlice.toString() + ", " + (firstSlice + 1).toString(), 0, 64);
+            context.fillText(firstBuffer.toString() + ", " + secondBuffer.toString(), 0, 80);
+        }
         
         // Determine whether or not to render the goal line
         var goalPosition = (this.goal * 32) - scrollX + 31;
@@ -102,8 +108,6 @@ GAME.LEVEL = (function() {
         
         
         context.fillStyle = "#889988";
-        context.fillText(firstSlice.toString() + ", " + (firstSlice + 1).toString(), 0, 64);
-        context.fillText(firstBuffer.toString() + ", " + secondBuffer.toString(), 0, 80);
         context.fillText(scrollX.toString(), 0, 112);
     };
     
@@ -144,13 +148,41 @@ GAME.LEVEL = (function() {
         this.tiles = [];
         
         // quickly makeshift a new level
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 2]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]);
+        }
+        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6]);
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5]);
+        }
+        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6]);
         for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]);
         for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1]);
         
         // goal line
-        this.goal = 70;
+        this.goal = 105;
+        
+        // load image if needed
+        if (image === undefined) {
+            image = new Image();
+            image.src = "assets/level1.png";
+        }
+        
+        // set tile properties
+        tileProperties = [
+            tileBaseProp.empty,
+            tileBaseProp.solid,
+            tileBaseProp.solid,
+            tileBaseProp.solid,
+            tileBaseProp.solid,
+            tileBaseProp.solid,
+            tileBaseProp.solid,
+            tileBaseProp.solid,
+            tileBaseProp.slippery
+        ];
+    
     };
     
     
@@ -199,9 +231,17 @@ GAME.LEVEL = (function() {
         // Render loop
         for (var x = 0; x < COLS_PER_SCREEN; x++) {
             for (var y = 0; y < ROWS; y++) {
-                var tileId = tiles[x + colsOffset][y];
-                context.fillStyle = tileProperties[tileId].color;
-                context.fillRect(x * 32, y * 32, 32, 32);
+                var tileId = 0;
+                if ((x + colsOffset) < tiles.length)
+                    tileId = tiles[x + colsOffset][y];
+                
+                // Draw color
+                //context.fillStyle = tileProperties[tileId].color;
+                //context.fillRect(x * 32, y * 32, 32, 32);
+                
+                // Draw image
+                //var tilePos = this.animation.frame * 32;
+                context.drawImage(image, tileId * 32, 0, 32, 32, x * 32, y * 32, 32, 32);
                 
                 //context.fillStyle = "#888888";
                 //context.fillText(x.toString() + "," + y.toString(), x * 32, y * 32 + 16);
