@@ -63,6 +63,7 @@ GAME.YACOPU = (function() {
         this.goal = false;
         
         this.onGround = 0;
+        this.thisFrameOnGround = true;
         
         this.level = null;
         
@@ -166,22 +167,30 @@ GAME.YACOPU = (function() {
         
         // detect "special" ground (slopes)
         if (tileUnder.slope) {
-            // positive acceleration
+            // calculate position within the tile
+            var xWithinTile = Math.floor(this.x + 16) % 32;
+            var yWithinTile = Math.floor(this.y + 32) % 32;
+            // positive acceleration (slope descending forward)
             if (tileUnder.slope === 1) {
-                // get position within the tile
-                var xWithinTile = Math.floor(this.x + 16) % 32;
-                var yWithinTile = Math.floor(this.y + 32) % 32;
                 // only consider slope if we're close enough to the actual diagonal
                 // (lets avoid snapping the player to the slope just for being within its tile)
-                if ((yWithinTile - xWithinTile) >= -16) {
+                if ((yWithinTile - xWithinTile) >= -12) {
                 
-                    // keep "snapped to slope"
-                    this.y = 32 * parseInt(this.y / 32) + xWithinTile;
+                    // keep "snapped to slope" unless we're flapping away (y speed negative)
+                    if (this.speedY >= 0)
+                        this.y = 32 * parseInt(this.y / 32) + xWithinTile;
                 
-                    // accelerate every other frame
-                    if (ticks % 2) this.speedX++;
+                    // accelerate fast to 24
+                    if (this.speedX < 24) {
+                        this.speedX++;
+                    } else {
+                        // then slow down acceleration (every other frame)
+                        if (ticks % 2) this.speedX++;
+                    }
+                    
                 
                 }
+            // negative acceleration (slope descending backwards)
             }
         };
         
@@ -198,7 +207,7 @@ GAME.YACOPU = (function() {
         };
         
         // Vertical movement if flying and not on ground (simulates holding right)
-        if (this.flying && this.speedX < 24 && !tileUnder.solid) this.speedX++;
+        if (this.flying && this.speedX < 24 && !(tileUnder.solid || tileUnder.slope)) this.speedX++;
         
         // Actually move based on speed
         this.x += (this.speedX / 8);
@@ -214,7 +223,7 @@ GAME.YACOPU = (function() {
         
         // Determine proper animation
         if (tileUnder.solid || tileUnder.slope) {
-            // If standing on the ground...
+            // If standing on something...
             // Set animation depending on xspeed
             if (this.speedX > 0) {
                 this.setAnimation("sliding");
@@ -234,6 +243,9 @@ GAME.YACOPU = (function() {
         // Update animation
         updateAnimation(this.animation);
         
+        // store onground status to be used by "flop"
+        this.thisFrameOnGround = (tileUnder.solid || tileUnder.slope);
+          
     };
     
     
@@ -250,7 +262,10 @@ GAME.YACOPU = (function() {
         if (this.goal) return null;
         
         // If standing on ground, give uncapped X acceleration
-        if (this.level.tileAt(this, 16, 32).solid) this.speedX += 6;
+        if (this.thisFrameOnGround) {
+            this.speedX += 6;
+            this.speedY = 0;
+        };
         
         // Iniciate flight
         if (!this.flying) this.flying = true;
