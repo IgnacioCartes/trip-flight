@@ -189,12 +189,27 @@ GAME.LEVEL = (function() {
         // 122 cols
         */
         
-        for (var i = 0; i < 16; i++) {
+        for (var i = 0; i < 12; i++) {
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
         }
         
-        for (var i = 0; i < 16; i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
+        this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
+        this.tiles.push([1, 1, 1, 0, 0, 0, 1, 1, 2, 2, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 1, 1, 2, 2, 2, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 3, 1, 2, 2, 2, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 0, 3, 1, 2, 2, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 3, 1, 2, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 3, 1, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 0, 3, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2]);
+        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2]);
+        
+        for (var i = 0; i < 8; i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
+        }
+        
+        for (var i = 0; i < 12; i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 1]);
         }
         
         this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
@@ -222,22 +237,26 @@ GAME.LEVEL = (function() {
         this.tiles.push([2, 2, 2, 2, 0, 0, 0, 3, 1, 2, 2]);
         this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 3, 1, 2]);
         this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 3, 1]);
-        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 1]);
+        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2]);
         
-        for (var i = 0; i < 24; i++) {
+        for (var i = 0; i < 16; i++) {
             this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
         }
         
-        for (var i = 0; i < 24; i++) {
-            this.tiles.push([2, 2, 2, 0, 0, 0, 2, 4, 0, 0, 4]);
+        for (var i = 0; i < 8; i++) {
+            this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 4, 1]);
         }
         
         for (var i = 0; i < 24; i++) {
-            this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
+            this.tiles.push([2, 2, 0, 4, 0, 0, 2, 2, 0, 0, 4]);
+        }
+        
+        for (var i = 0; i < 24; i++) {
+            this.tiles.push([0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 1]);
         }
         
         // goal line
-        this.goal = 128;
+        this.goal = 144;
         
         // load image if needed
         if (image === undefined) {
