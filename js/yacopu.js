@@ -63,6 +63,7 @@ GAME.YACOPU = (function() {
         this.goal = false;
         
         this.onGround = 0;
+        this.lastOnGround = 0;
         this.thisFrameOnGround = true;
         
         this.level = null;
@@ -123,9 +124,10 @@ GAME.YACOPU = (function() {
         
         // debug
         context.font = "12px Arial";
-        context.fillStyle = "#000000";
+        context.fillStyle = "#543210";
         context.fillText("speed: " + this.speedX.toString() + ", " + this.speedY.toString(), 0, 16);
         context.fillText("position: " + this.x.toString() + ", " + this.y.toString(), 0, 32);
+        context.fillText("onGround: " + this.lastOnGround.toString(), 0, 192);
         
         // speed
         if (this.speedX > 0) {
@@ -144,7 +146,10 @@ GAME.YACOPU = (function() {
      *  updates yacopu's speed and position on every frame, and handles level interaction
      *
      */
-    yacopu.prototype.update = function (ticks) {
+    yacopu.prototype.update = function (game) {
+        
+        // get ticks
+        var ticks = game.getTicks();
         
         // Determine relevant surroundings (tiles below and ahead)
         var tileUnder = this.level.tileAt(this, 16, 32);
@@ -160,8 +165,9 @@ GAME.YACOPU = (function() {
         // Gravity
         if (this.speedY < 24) this.speedY++;
         
-        // if standing on ground, cancel Y acceleration if positive, deaccelerate in X and "snap to grid"
+        // if standing on ground, cancel Y acceleration if positive
         if (tileUnder.solid) {
+            // if going down
             if (this.speedY > 0) {
                 
                 // determine whether to bounce or fullstop
@@ -171,10 +177,17 @@ GAME.YACOPU = (function() {
                     this.speedY = 0;
                 }
             }
-            if (this.speedX > 0 && !tileUnder.slippery) this.speedX--;
+            
+            // deaccelerate after 2 frames on ground unless floor is slippery
+            if (this.speedX > 0 && !tileUnder.slippery && (this.onGround >= 2)) this.speedX--;
+            
+            // "snap to grid"
             this.y = 32 * parseInt(this.y / 32);
             this.onGround++;
-        };
+        } else {
+            // reset onground counter
+            this.onGround = 0;
+        }
         
         // detect "special" ground (slopes)
         if (tileUnder.slope) {
@@ -185,7 +198,7 @@ GAME.YACOPU = (function() {
             if (tileUnder.slope === 1) {
                 // only consider slope if we're close enough to the actual diagonal
                 // (lets avoid snapping the player to the slope just for being within its tile)
-                if ((yWithinTile - xWithinTile) >= -12) {
+                if ((yWithinTile - xWithinTile) >= -16) {
                 
                     // keep "snapped to slope" unless we're flapping away (y speed negative)
                     if (this.speedY >= 0)
@@ -198,8 +211,6 @@ GAME.YACOPU = (function() {
                         // then slow down acceleration (every other frame)
                         if (ticks % 2) this.speedX++;
                     }
-                    
-                
                 }
             // negative acceleration (slope descending backwards)
             }
@@ -220,7 +231,7 @@ GAME.YACOPU = (function() {
         if (tileAhead.solid) {
             // if we were going too fast, count this as a "bonk"
             if (this.speedX >= 16) {
-                this.bonk++;
+                this.bonks++;
                 console.log("bonk!");
             }
             
@@ -290,7 +301,7 @@ GAME.YACOPU = (function() {
      *  activates a "flap", which is yacopu gaining upwards velocity
      *
      */
-    yacopu.prototype.flap = function () {
+    yacopu.prototype.flap = function (game) {
         
         // If the goal has been reached already, ignore
         if (this.goal) return null;
@@ -299,6 +310,7 @@ GAME.YACOPU = (function() {
         if (this.thisFrameOnGround) {
             this.speedX += 6;
             this.speedY = 0;
+            this.lastOnGround = this.onGround;
         };
         
         // Iniciate flight
