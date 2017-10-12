@@ -154,6 +154,7 @@ GAME.LEVEL = (function() {
         this.tiles = [];
         
         // quickly makeshift a new level
+        /*
         for (var i = 0; i < (COLS_PER_SCREEN - 5); i++) {
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]);
@@ -180,25 +181,67 @@ GAME.LEVEL = (function() {
         }
         
         // 122 cols
+        */
+        
+        for (var i = 0; i < 16; i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
+        }
+        
+        for (var i = 0; i < 16; i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
+        }
+        
+        this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
+        
+        for (var i = 0; i < 8; i++) {
+            this.tiles.push([1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
+        }
+        
+        for (var i = 0; i < 8; i++) {
+            this.tiles.push([1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2]);
+        }
+        this.tiles.push([2, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2]);
+        this.tiles.push([2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2]);
+        
+        
+        for (var i = 0; i < 8; i++) {
+            this.tiles.push([2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 2]);
+        }
+        
+        for (var i = 0; i < 8; i++) {
+            this.tiles.push([2, 2, 2, 2, 0, 0, 0, 1, 2, 2, 2]);
+        }
+        this.tiles.push([2, 2, 2, 2, 1, 0, 0, 1, 1, 2, 2]);
+        
+        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 3, 1, 2, 2]);
+        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 3, 1, 2]);
+        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 3, 1]);
+        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 1]);
+        
+        for (var i = 0; i < 24; i++) {
+            this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
+        }
+        
+        for (var i = 0; i < 24; i++) {
+            this.tiles.push([2, 2, 2, 0, 0, 0, 2, 0, 0, 0, 1]);
+        }
+        
+        for (var i = 0; i < 24; i++) {
+            this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
+        }
         
         // goal line
-        this.goal = 112;
+        this.goal = 128;
         
         // load image if needed
         if (image === undefined) {
             image = new Image();
-            image.src = "assets/level1.png";
+            image.src = "assets/level2.png";
         }
         
         // set tile properties
         tileProperties = [
             tileBaseProp.empty,
-            tileBaseProp.solid,
-            tileBaseProp.solid,
-            tileBaseProp.solid,
-            tileBaseProp.solid,
-            tileBaseProp.solid,
-            tileBaseProp.solid,
             tileBaseProp.solid,
             tileBaseProp.slippery,
             tileBaseProp.slope

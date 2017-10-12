@@ -70,6 +70,9 @@ GAME.YACOPU = (function() {
         this.speedX = 0;
         this.speedY = 0;
         
+        this.maxSpeed = 0;
+        this.bonks = 0;
+        
         this.animation = {
             name: "",
             step: 0,
@@ -202,7 +205,14 @@ GAME.YACOPU = (function() {
         
         // If hitting an obstacle face first, stop fully and "snap to grid"
         if (tileAhead.solid) {
+            // if we were going too fast, count this as a "bonk"
+            if (this.speedX >= 16) {
+                this.bonk++;
+                console.log("bonk!");
+            }
+            
             this.speedX = 0;
+            
             this.x = 32 * parseInt(this.x / 32);
         };
         
@@ -213,10 +223,15 @@ GAME.YACOPU = (function() {
         this.x += (this.speedX / 8);
         this.y += (this.speedY / 8);
         
+        // record max speed
+        if (this.speedX > this.maxSpeed) this.maxSpeed = this.speedX;
+        
         // Check if goal has been reached
         if (!this.goal) {
             if (this.x >= (this.level.goal * 32)) {
                 console.log("GOAL! " + (this.x - (this.level.goal * 32)).toString());
+                console.log("max speed: " + this.maxSpeed.toString());
+                console.log("bonks: " + this.bonks.toString());
                 this.goal = true;
             };
         };
@@ -245,6 +260,7 @@ GAME.YACOPU = (function() {
         
         // store onground status to be used by "flop"
         this.thisFrameOnGround = (tileUnder.solid || tileUnder.slope);
+        
           
     };
     

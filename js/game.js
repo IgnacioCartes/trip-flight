@@ -101,6 +101,9 @@ var GAME = (function () {
         // clear buffer before calling individual function for each mode
         this.clearBuffer();
         
+        // make sure global alpha is set to 1
+        context.globalAlpha = 1;
+        
         // call render method depending on mode
         GAME.MODE[mode].render(context);
         
