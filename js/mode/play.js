@@ -25,6 +25,9 @@ GAME.MODE = (function(mode) {
     var raceTime, countdownTime, initialTimeStamp;
     var hasRaceStarted = false;
     
+    // flap history
+    var flapHistory = [];
+    
     
     
     /*
@@ -51,6 +54,8 @@ GAME.MODE = (function(mode) {
         initialTimeStamp = game.getTicks();
         
         hasRaceStarted = false;
+        
+        flapHistory = [];
     };
     
     
@@ -77,11 +82,17 @@ GAME.MODE = (function(mode) {
         };
         
         // update yacopu movement
-        yacopu.update(game.getTicks());
+        yacopu.update(game);
             
         // flap if a touch occured on this frame
         if (input.touch.click) {
-            yacopu.flap();
+            yacopu.flap(game);
+            
+            if (!yacopu.goal) {
+                flapHistory.push(raceTime);
+            } else {
+                console.log(flapHistory.length);
+            }
         }
             
         // scroll screen if needed
