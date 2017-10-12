@@ -162,7 +162,15 @@ GAME.YACOPU = (function() {
         
         // if standing on ground, cancel Y acceleration if positive, deaccelerate in X and "snap to grid"
         if (tileUnder.solid) {
-            if (this.speedY > 0) this.speedY = 0;
+            if (this.speedY > 0) {
+                
+                // determine whether to bounce or fullstop
+                if (tileUnder.bounce) {
+                    this.speedY = -this.speedY * tileUnder.bounce;
+                } else {
+                    this.speedY = 0;
+                }
+            }
             if (this.speedX > 0 && !tileUnder.slippery) this.speedX--;
             this.y = 32 * parseInt(this.y / 32);
             this.onGround++;
@@ -199,7 +207,12 @@ GAME.YACOPU = (function() {
         
         // If hitting an obstacle with head, cancel upwards velocity and "snap to grid"
         if (tileAbove.solid) {
-            this.speedY = 0;
+            // determine whether to bounce or fullstop
+            if (tileAbove.bounce) {
+                this.speedY = -this.speedY * tileAbove.bounce;
+            } else {
+                this.speedY = 0;
+            }
             this.y = 32 * Math.round((this.y / 32));
         };
         
@@ -211,7 +224,12 @@ GAME.YACOPU = (function() {
                 console.log("bonk!");
             }
             
-            this.speedX = 0;
+            // determine whether to bounce or fullstop
+            if (tileAhead.bounce) {
+                this.speedX = -this.speedX * tileAhead.bounce;
+            } else {
+                this.speedX = 0;
+            }
             
             this.x = 32 * parseInt(this.x / 32);
         };

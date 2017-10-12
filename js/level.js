@@ -33,6 +33,12 @@ GAME.LEVEL = (function() {
             solid: true,
             slippery: true
         },
+        "bouncy":
+        {
+            color: "#EE9966",
+            solid: true,
+            bounce: 1
+        },
         "slope":
         {
             color: "#998877",
@@ -201,7 +207,7 @@ GAME.LEVEL = (function() {
             this.tiles.push([1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2]);
         }
         this.tiles.push([2, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2]);
-        this.tiles.push([2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2]);
+        this.tiles.push([2, 2, 4, 4, 4, 0, 4, 4, 2, 2, 2]);
         
         
         for (var i = 0; i < 8; i++) {
@@ -223,7 +229,7 @@ GAME.LEVEL = (function() {
         }
         
         for (var i = 0; i < 24; i++) {
-            this.tiles.push([2, 2, 2, 0, 0, 0, 2, 0, 0, 0, 1]);
+            this.tiles.push([2, 2, 2, 0, 0, 0, 2, 4, 0, 0, 4]);
         }
         
         for (var i = 0; i < 24; i++) {
@@ -244,7 +250,8 @@ GAME.LEVEL = (function() {
             tileBaseProp.empty,
             tileBaseProp.solid,
             tileBaseProp.slippery,
-            tileBaseProp.slope
+            tileBaseProp.slope,
+            tileBaseProp.bouncy
         ];
     
     };
