@@ -164,6 +164,27 @@ GAME.YACOPU = (function() {
             this.onGround++;
         };
         
+        // detect "special" ground (slopes)
+        if (tileUnder.slope) {
+            // positive acceleration
+            if (tileUnder.slope === 1) {
+                // get position within the tile
+                var xWithinTile = Math.floor(this.x + 16) % 32;
+                var yWithinTile = Math.floor(this.y + 32) % 32;
+                // only consider slope if we're close enough to the actual diagonal
+                // (lets avoid snapping the player to the slope just for being within its tile)
+                if ((yWithinTile - xWithinTile) >= -16) {
+                
+                    // keep "snapped to slope"
+                    this.y = 32 * parseInt(this.y / 32) + xWithinTile;
+                
+                    // accelerate every other frame
+                    if (ticks % 2) this.speedX++;
+                
+                }
+            }
+        };
+        
         // If hitting an obstacle with head, cancel upwards velocity and "snap to grid"
         if (tileAbove.solid) {
             this.speedY = 0;
@@ -192,7 +213,7 @@ GAME.YACOPU = (function() {
         };
         
         // Determine proper animation
-        if (tileUnder.solid) {
+        if (tileUnder.solid || tileUnder.slope) {
             // If standing on the ground...
             // Set animation depending on xspeed
             if (this.speedX > 0) {

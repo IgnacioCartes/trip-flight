@@ -13,6 +13,8 @@ GAME.LEVEL = (function() {
     // images
     var image;
     
+    // tile properties (these should be set for each level)
+    var tileProperties;
     
     // tile base properties
     var tileBaseProp = {
@@ -30,11 +32,15 @@ GAME.LEVEL = (function() {
             color: "#AABBEE",
             solid: true,
             slippery: true
+        },
+        "slope":
+        {
+            color: "#998877",
+            solid: false,
+            slope: 1
         }
     };
     
-    // tile properties (these should be set for each level)
-    var tileProperties;
     
     
     /*
@@ -148,21 +154,35 @@ GAME.LEVEL = (function() {
         this.tiles = [];
         
         // quickly makeshift a new level
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) {
+        for (var i = 0; i < (COLS_PER_SCREEN - 5); i++) {
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]);
         }
+        
+        
+        this.tiles.push([0, 0, 0, 0, 0, 1, 5, 6, 5, 6, 5]);
+        this.tiles.push([0, 0, 0, 0, 0, 9, 6, 5, 6, 5, 6]);
+        this.tiles.push([0, 0, 0, 0, 0, 0, 9, 6, 5, 6, 5]);
+        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 9, 6, 5, 6]);
+        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 9, 6, 5]);
+        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6]);
+        
         this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5]);
         for (var i = 0; i < (COLS_PER_SCREEN); i++) {
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6]);
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5]);
         }
-        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) this.tiles.push([0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1]);
+        
+        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 6]);
+        for (var i = 0; i < (COLS_PER_SCREEN); i++) {
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 5]);
+            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 6]);
+        }
+        
+        // 122 cols
         
         // goal line
-        this.goal = 105;
+        this.goal = 112;
         
         // load image if needed
         if (image === undefined) {
@@ -180,7 +200,8 @@ GAME.LEVEL = (function() {
             tileBaseProp.solid,
             tileBaseProp.solid,
             tileBaseProp.solid,
-            tileBaseProp.slippery
+            tileBaseProp.slippery,
+            tileBaseProp.slope
         ];
     
     };
