@@ -60,7 +60,7 @@ GAME.MODE = (function(mode) {
         buttons.stage_select.update(input);
             
         // React to button
-        if (buttons.stage_select.click) game.setMode("PLAY", { level: 1 });
+        if (buttons.stage_select.click) game.setMode("STAGE_SELECT", { level: 1 });
         
     };
     

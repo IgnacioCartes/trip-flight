@@ -38,6 +38,14 @@ GAME.MODE = (function(mode) {
             
         buttons.play = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.play.image = new Image();
+        
+        
+        buttons.previous = new GAME.BUTTON(320 - 96 - 96, 224 - 16, 64, 64);
+        buttons.previous.image = new Image();
+        
+        buttons.next = new GAME.BUTTON(320 + 96 + 32, 224 - 16, 64, 64);
+        buttons.next.image = new Image();
+        
             
         buttons.title = new GAME.BUTTON(320 - 96, 272, 192, 32);
         buttons.title.image = new Image();
@@ -56,11 +64,16 @@ GAME.MODE = (function(mode) {
 
         // Update button
         buttons.play.update(input);
+        buttons.previous.update(input);
+        buttons.next.update(input);
         buttons.title.update(input);
             
         // React to button
         if (buttons.play.click) game.setMode("PLAY", { level: 1 });
         if (buttons.title.click) game.setMode("TITLE");
+        
+        if (buttons.previous.click) console.log("beep");
+        if (buttons.next.click) console.log("boop");
         
     };
     
@@ -76,6 +89,8 @@ GAME.MODE = (function(mode) {
         
         level.render(context, 0);
         buttons.play.render(context, "#FF0000");
+        buttons.previous.render(context, "#FF0000");
+        buttons.next.render(context, "#FF0000");
         buttons.title.render(context, "#FF0000");
         
     };
