@@ -20,6 +20,8 @@ GAME.BUTTON = (function() {
         this.click = false;
         
         this.image = null;
+        
+        this.text = null;
     };
     
     
@@ -51,6 +53,11 @@ GAME.BUTTON = (function() {
             
             context.strokeStyle = storeStrokeStyle;
         }
+        
+        // Draw text if there is any
+        if (this.text) {
+            context.fillText(this.text, this.x, this.y);
+        };
 
     };
     
