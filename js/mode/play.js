@@ -152,6 +152,11 @@ GAME.MODE = (function(mode) {
         context.fillStyle = "#3377BB";
         context.fillText((roundraceTime).toString(), 512, 16);
         
+        if (yacopu.goal) {
+            context.fillText("max speed: " + yacopu.maxSpeed.toString(), 32, 208);
+            context.fillText("bonks: " + yacopu.bonks.toString(), 32, 224);
+        }
+        
     };
     
     

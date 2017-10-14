@@ -41,7 +41,7 @@ GAME.MODE = (function(mode) {
             
         buttons.play = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.play.image = new Image();
-        
+        buttons.play.text = selectedLevel.toString();
         
         buttons.previous = new GAME.BUTTON(320 - 96 - 96, 224 - 16, 64, 64);
         buttons.previous.image = new Image();
@@ -81,12 +81,12 @@ GAME.MODE = (function(mode) {
         if (buttons.previous.click) {
             selectedLevel--;
             if (selectedLevel === 0) selectedLevel = game.save.levelsUnlocked;
-            console.log(selectedLevel);
+            buttons.play.text = selectedLevel.toString();
         };
         if (buttons.next.click) {
             selectedLevel++;
             if (selectedLevel > game.save.levelsUnlocked) selectedLevel = 1;
-            console.log(selectedLevel);
+            buttons.play.text = selectedLevel.toString();
         }
         
     };

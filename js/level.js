@@ -49,6 +49,7 @@ GAME.LEVEL = (function() {
     
     // levels
     var levelsURL = [
+        "level/0.json",
         "level/1.json"
     ];
     
@@ -118,7 +119,6 @@ GAME.LEVEL = (function() {
             context.fillText(firstBuffer.toString() + ", " + secondBuffer.toString(), 0, 80);
         } else {
             this.loadWait++;
-            console.log(this.loadWait);
         };
         
         // Determine whether or not to render the goal line
@@ -168,11 +168,13 @@ GAME.LEVEL = (function() {
         
         
         // load level from json
-        instance.url = levelsURL[0];
+        instance.url = levelsURL[id];
+        if (!instance.url) instance.url = "level/1.json";
         
         // set request
         var xhr = new XMLHttpRequest();
-        xhr.overrideMimeType("application/json");
+        // this one line breaks cocoon - so lets not have it
+        //xhr.overrideMimeType("application/json");
         xhr.open('GET', instance.url, true);
         
         xhr.responseType = 'json';
@@ -215,99 +217,26 @@ GAME.LEVEL = (function() {
             };
             
             // and the actual level
-            var tiles = [];
+            instance.tiles = [];
             
             // load method depends on layoutStyle property
             if (data.layoutStyle === "columns") {
                 
                 // columns -- array of columns that are placed on the level
                 for (var i = 0, l = data.level.length; i < l; i++) {
-                    tiles.push(data.columns[data.level[i]]);
+                    instance.tiles.push(data.columns[data.level[i]]);
                 };
                 
             };
-            instance.tiles = tiles;
             
             // Calculate rightmost bound, to prevent scrolling past this point
-            instance.rightBound = (tiles.length - COLS_PER_SCREEN) * 32 - 2;
+            instance.rightBound = (instance.tiles.length - COLS_PER_SCREEN) * 32 - 2;
             
             // level has been loaded
             instance.loaded = true;
             
         }
         
-        
-        
-        /*
-        this.tiles = [];
-        
-        
-        for (var i = 0; i < 12; i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
-        }
-        
-        this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
-        this.tiles.push([1, 1, 1, 0, 0, 0, 1, 1, 2, 2, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 1, 1, 2, 2, 2, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 3, 1, 2, 2, 2, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 0, 3, 1, 2, 2, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 3, 1, 2, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 3, 1, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 0, 3, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2]);
-        this.tiles.push([2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2]);
-        
-        for (var i = 0; i < 8; i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
-        }
-        
-        for (var i = 0; i < 12; i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 1]);
-        }
-        
-        this.tiles.push([1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
-        
-        for (var i = 0; i < 8; i++) {
-            this.tiles.push([1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1]);
-        }
-        
-        for (var i = 0; i < 8; i++) {
-            this.tiles.push([1, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2]);
-        }
-        this.tiles.push([2, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2]);
-        this.tiles.push([2, 2, 4, 4, 4, 0, 4, 4, 2, 2, 2]);
-        
-        
-        for (var i = 0; i < 8; i++) {
-            this.tiles.push([2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 2]);
-        }
-        
-        for (var i = 0; i < 8; i++) {
-            this.tiles.push([2, 2, 2, 2, 0, 0, 0, 1, 2, 2, 2]);
-        }
-        this.tiles.push([2, 2, 2, 2, 1, 0, 0, 1, 1, 2, 2]);
-        
-        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 3, 1, 2, 2]);
-        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 3, 1, 2]);
-        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 3, 1]);
-        this.tiles.push([2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2]);
-        
-        for (var i = 0; i < 16; i++) {
-            this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
-        }
-        
-        for (var i = 0; i < 8; i++) {
-            this.tiles.push([2, 2, 2, 0, 0, 0, 0, 0, 0, 4, 1]);
-        }
-        
-        for (var i = 0; i < 24; i++) {
-            this.tiles.push([2, 2, 0, 4, 0, 0, 2, 2, 0, 0, 4]);
-        }
-        
-        for (var i = 0; i < 24; i++) {
-            this.tiles.push([0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 1]);
-        }
-        */
     
     };
     

@@ -1,8 +1,8 @@
 {
-    "name": "Makeshift Level 1",
+    "name": "Makeshift Level 0",
     "author": "@NachoYacopu",
     "creationDate": "14-10-2017",
-    "tileset": "assets/level2.png",
+    "tileset": "assets/level1.png",
     "tileProperties": [
         "empty",
         "solid",
