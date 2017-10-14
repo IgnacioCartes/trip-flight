@@ -57,6 +57,8 @@ GAME.PARTICLE = (function() {
             
             this.color = "#000000";
         }
+        
+        this.evenOnly = true;
     
         // lifespan to 0
         this.lifespan = 0;
@@ -75,9 +77,21 @@ GAME.PARTICLE = (function() {
         // do nothing if particle is dead
         if (!this.alive) return null;
         
+        var thisx = this.x - scrollX;
+        var thisy = this.y
+        
+        // calculate coordinates
+        if (this.evenOnly) {
+            thisx = 2 * Math.round((thisx) / 2);
+            thisy = 2 * Math.round((thisy) / 2) + 2;
+        }
+        
+        // don't bother drawing if they're offscreen
+        if ((thisx < -8) || (thisy < -8)) return null;
+        
         // draw
         context.fillStyle = this.color || "#000000";
-        context.fillRect(this.x - scrollX, this.y, 8, 8);
+        context.fillRect(thisx, thisy, 8, 8);
         
     };
     

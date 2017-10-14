@@ -14,7 +14,10 @@ var GAME = (function () {
     
     // different saved properties -- now just set by default
     var save = {
-        levelsUnlocked: 5
+        levelsUnlocked: 1,
+        bestTimes: [
+            500
+        ]
     };
     
     
