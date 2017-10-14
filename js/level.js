@@ -47,6 +47,11 @@ GAME.LEVEL = (function() {
         }
     };
     
+    // levels
+    var levelsURL = [
+        "level/1.json"
+    ];
+    
     
     
     /*
@@ -58,15 +63,16 @@ GAME.LEVEL = (function() {
      */
     var level = function(id) {
         // Create a new level structure
-        createNewLevel.bind(this, id)();
+        createNewLevel(id, this);
         this.id = id;
         
         // Create screenbuffers if this is the first time a level is being instantiated
         if (screenBuffers === undefined) createScreenBuffers();
         renderedSlices = [-1, -1];
         
-        // Calculate rightmost bound, to prevent scrolling past this point
-        this.rightBound = (this.tiles.length - COLS_PER_SCREEN) * 32 - 2;
+        // initiate as NOT loaded
+        this.loaded = false;
+        this.loadWait = 0;
         
     };
     
@@ -80,8 +86,8 @@ GAME.LEVEL = (function() {
      */
     level.prototype.render = function(context, scrollX) {
         
-        // We want to wait until level image is loaded before rendering the actual level
-        if (image.complete) {
+        // We want to wait until level and image are loaded before rendering the actual level
+        if (this.loaded && image.complete) {
 
             // Determine which slices to render and offset
             var firstSlice = Math.floor(scrollX / (32 * COLS_PER_SCREEN));
@@ -110,7 +116,10 @@ GAME.LEVEL = (function() {
             
             context.fillText(firstSlice.toString() + ", " + (firstSlice + 1).toString(), 0, 64);
             context.fillText(firstBuffer.toString() + ", " + secondBuffer.toString(), 0, 80);
-        }
+        } else {
+            this.loadWait++;
+            console.log(this.loadWait);
+        };
         
         // Determine whether or not to render the goal line
         var goalPosition = (this.goal * 32) - scrollX + 31;
@@ -150,44 +159,88 @@ GAME.LEVEL = (function() {
     
     
     /*
-     * private void createNewLevel(id)
+     * private void createNewLevel(id, instance)
      *
      *  creates and returns a new level based on the id properties, used on the level constructor
      *
      */
-    function createNewLevel(id) {
+    function createNewLevel(id, instance) {
         
+        
+        // load level from json
+        instance.url = levelsURL[0];
+        
+        // set request
+        var xhr = new XMLHttpRequest();
+        xhr.overrideMimeType("application/json");
+        xhr.open('GET', instance.url, true);
+        
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+            var status = xhr.status;
+            var response = xhr.response;
+            if (status === 200) {
+                levelLoadCallback(null, response);
+            } else {
+                levelLoadCallback(status, response);
+            }
+        };
+        
+        // send request -- have a safe trip, lil request!
+        xhr.send();
+        
+        
+        // callback function once level has been loaded
+        function levelLoadCallback(err, data) {
+            
+            // if there is an error, fail catastrophically
+            if (err !== null) return null;
+            
+            // get parameters from json
+            instance.name = data.name;
+            instance.author = data.author;
+            instance.creationDate = data.creationDate;
+            
+            // tileset
+            image = new Image();
+            image.src = data.tileset;
+            
+            // goal
+            instance.goal = data.goal;
+            
+            // tile properties
+            tileProperties = [];
+            for (var i = 0, l = data.tileProperties.length; i < l; i++) {
+                tileProperties.push(tileBaseProp[data.tileProperties[i]]);
+            };
+            
+            // and the actual level
+            var tiles = [];
+            
+            // load method depends on layoutStyle property
+            if (data.layoutStyle === "columns") {
+                
+                // columns -- array of columns that are placed on the level
+                for (var i = 0, l = data.level.length; i < l; i++) {
+                    tiles.push(data.columns[data.level[i]]);
+                };
+                
+            };
+            instance.tiles = tiles;
+            
+            // Calculate rightmost bound, to prevent scrolling past this point
+            instance.rightBound = (tiles.length - COLS_PER_SCREEN) * 32 - 2;
+            
+            // level has been loaded
+            instance.loaded = true;
+            
+        }
+        
+        
+        
+        /*
         this.tiles = [];
         
-        // quickly makeshift a new level
-        /*
-        for (var i = 0; i < (COLS_PER_SCREEN - 5); i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]);
-        }
-        
-        
-        this.tiles.push([0, 0, 0, 0, 0, 1, 5, 6, 5, 6, 5]);
-        this.tiles.push([0, 0, 0, 0, 0, 9, 6, 5, 6, 5, 6]);
-        this.tiles.push([0, 0, 0, 0, 0, 0, 9, 6, 5, 6, 5]);
-        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 9, 6, 5, 6]);
-        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 9, 6, 5]);
-        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6]);
-        
-        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6]);
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5]);
-        }
-        
-        this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 6]);
-        for (var i = 0; i < (COLS_PER_SCREEN); i++) {
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 5]);
-            this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 6]);
-        }
-        
-        // 122 cols
-        */
         
         for (var i = 0; i < 12; i++) {
             this.tiles.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
@@ -254,24 +307,7 @@ GAME.LEVEL = (function() {
         for (var i = 0; i < 24; i++) {
             this.tiles.push([0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 1]);
         }
-        
-        // goal line
-        this.goal = 144;
-        
-        // load image if needed
-        if (image === undefined) {
-            image = new Image();
-            image.src = "assets/level2.png";
-        }
-        
-        // set tile properties
-        tileProperties = [
-            tileBaseProp.empty,
-            tileBaseProp.solid,
-            tileBaseProp.slippery,
-            tileBaseProp.slope,
-            tileBaseProp.bouncy
-        ];
+        */
     
     };
     

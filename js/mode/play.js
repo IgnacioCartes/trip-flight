@@ -112,7 +112,6 @@ GAME.MODE = (function(mode) {
                 var newParticle = new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" });
                 particleCollection.push(newParticle);
             };
-            console.log(particleCollection.length);
         }
             
         // scroll screen if needed

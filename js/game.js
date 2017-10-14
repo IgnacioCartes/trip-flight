@@ -12,6 +12,11 @@ var GAME = (function () {
     // game mode - different scenes within the game
     var mode;
     
+    // different saved properties -- now just set by default
+    var save = {
+        levelsUnlocked: 5
+    };
+    
     
 
     /*
@@ -36,6 +41,9 @@ var GAME = (function () {
         
         // Start the display
         display.run();
+        
+        // share save data
+        this.save = save;
         
     };
     

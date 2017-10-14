@@ -18,6 +18,9 @@ GAME.MODE = (function(mode) {
     // Buttons
     var buttons = {};
     
+    // currently selected level
+    var selectedLevel = 1;
+    
     
     
     /*
@@ -68,12 +71,23 @@ GAME.MODE = (function(mode) {
         buttons.next.update(input);
         buttons.title.update(input);
             
-        // React to button
-        if (buttons.play.click) game.setMode("PLAY", { level: 1 });
+        // Play the selected level...
+        if (buttons.play.click) game.setMode("PLAY", { level: selectedLevel });
+        
+        // ...or go back to title screen
         if (buttons.title.click) game.setMode("TITLE");
         
-        if (buttons.previous.click) console.log("beep");
-        if (buttons.next.click) console.log("boop");
+        // level selectors - previous and next
+        if (buttons.previous.click) {
+            selectedLevel--;
+            if (selectedLevel === 0) selectedLevel = game.save.levelsUnlocked;
+            console.log(selectedLevel);
+        };
+        if (buttons.next.click) {
+            selectedLevel++;
+            if (selectedLevel > game.save.levelsUnlocked) selectedLevel = 1;
+            console.log(selectedLevel);
+        }
         
     };
     
