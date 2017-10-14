@@ -28,6 +28,9 @@ GAME.MODE = (function(mode) {
     // flap history
     var flapHistory = [];
     
+    // collection of particles
+    var particleCollection = [];
+    
     
     
     /*
@@ -83,16 +86,33 @@ GAME.MODE = (function(mode) {
         
         // update yacopu movement
         yacopu.update(game);
+        
+        // update particles - go through loop in reverse order
+        for(var i = particleCollection.length - 1; i >= 0; i--) {
+            var thisParticle = particleCollection[i];
+            // call their update method
+            thisParticle.update(game);
+            
+            // splice particle away if its dead
+            if (!thisParticle.alive) {
+                particleCollection.splice(i, 1);
+            }
+            
+        };
             
         // flap if a touch occured on this frame
         if (input.touch.click) {
             yacopu.flap(game);
             
-            if (!yacopu.goal) {
-                flapHistory.push(raceTime);
-            } else {
-                console.log(flapHistory.length);
-            }
+            // track "flap history"
+            if (!yacopu.goal) flapHistory.push(raceTime);
+            
+            // create new random particles
+            for (var i = 0; i < 8; i++) {
+                var newParticle = new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" });
+                particleCollection.push(newParticle);
+            };
+            console.log(particleCollection.length);
         }
             
         // scroll screen if needed
@@ -116,8 +136,17 @@ GAME.MODE = (function(mode) {
      *
      */
     play.render = function(context) {
+        // display level and yacopu
         level.render(context, scrollX);
         yacopu.render(context, scrollX);
+        
+        // display particles
+        for(var i = particleCollection.length - 1; i >= 0; i--) {
+            var thisParticle = particleCollection[i];
+            // call their render method
+            thisParticle.render(context, scrollX);
+            
+        };
         
         var roundraceTime = Math.round((raceTime / 60) * 100) / 100;
         
