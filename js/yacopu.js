@@ -90,6 +90,8 @@ GAME.YACOPU = (function() {
             image.src = "assets/yacopu.png";
         }
         
+        return this;
+        
     };
     
     
@@ -180,10 +182,14 @@ GAME.YACOPU = (function() {
             
             // deaccelerate after 2 frames on ground unless floor is slippery
             if (this.speedX > 0 && !tileUnder.slippery && (this.onGround >= 2)) this.speedX--;
+            // if going backwards, deaccelerate no matter what
+            if (this.speedX < 0) this.speedX++;
             
             // "snap to grid"
             this.y = 32 * parseInt(this.y / 32);
+            // increase onground counter
             this.onGround++;
+            
         } else {
             // reset onground counter
             this.onGround = 0;
@@ -205,12 +211,12 @@ GAME.YACOPU = (function() {
                         this.y = 32 * parseInt(this.y / 32) + xWithinTile;
                 
                     // accelerate fast to 24
-                    if (this.speedX < 24) {
+                    //if (this.speedX < 24) {
                         this.speedX++;
-                    } else {
+                    //} else {
                         // then slow down acceleration (every other frame)
-                        if (ticks % 2) this.speedX++;
-                    }
+                    //    if (ticks % 2) this.speedX++;
+                    //}
                 }
             // negative acceleration (slope descending backwards)
             }
