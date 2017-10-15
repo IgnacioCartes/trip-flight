@@ -77,6 +77,9 @@ GAME.PARTICLE = (function() {
         // do nothing if particle is dead
         if (!this.alive) return null;
         
+        // run additional render routine if one was provided
+        if (typeof this.preRender === "function") this.preRender(context);
+        
         var thisx = this.x - scrollX;
         var thisy = this.y
         
@@ -107,6 +110,9 @@ GAME.PARTICLE = (function() {
         
         // do nothing if particle is dead
         if (!this.alive) return null;
+        
+        // run additional update routine if one was provided
+        if (typeof this.preUpdate === "function") this.preUpdate(game);
         
         // move
         this.x += this.speedX;
