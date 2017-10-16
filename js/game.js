@@ -15,14 +15,6 @@ var GAME = (function () {
     // game mode - different scenes within the game
     var mode;
     
-    // different saved properties -- now just set by default
-    var save = {
-        levelsUnlocked: 1,
-        bestTimes: [
-            500
-        ]
-    };
-    
     // fade - handles fade in/outs for game mode transitions
     var fade = {
         active: false,
@@ -33,6 +25,9 @@ var GAME = (function () {
         callback: null
     };
     
+    // key used to access local storage
+    var localStorageKey = "com.trip-flight";
+    
     
 
     /*
@@ -42,6 +37,9 @@ var GAME = (function () {
      *
      */
     var game = function () {
+        
+        // save a reference to this game instance
+        gameInstance = this;
         
         // set size
         this.width = 640;
@@ -62,15 +60,13 @@ var GAME = (function () {
         display.run();
         
         // share save data
-        this.save = save;
+        this.save = loadLocalStorageData();
         
         // set initial fadein
         fade.active = true;
         fade.direction = 1;
         fade.step = 0;
         
-        // save a reference to this game instance
-        gameInstance = this;
         
     };
     
@@ -184,6 +180,55 @@ var GAME = (function () {
         
         // Display screen resolution
         context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
+        
+    }
+    
+    
+    
+    /*
+     * private object loadLocalStorageData()
+     *
+     *  loads data from local storage, or creates (and stores) a new one if no data exists
+     *
+     */
+    function loadLocalStorageData() {
+        
+        var data = window.localStorage.getItem(localStorageKey);
+        
+        if (!data) {
+            // no data in localStorage -- initialize an object
+            data = {
+                levelsUnlocked: 1,
+                bestTimes: [
+                    500
+                ],
+                saveDataCreationDate: new Date()
+            };
+            gameInstance.saveLocalStorageData(data);
+        } else {
+            // parse window storage data
+            data = JSON.parse(data);
+        }
+        return data;
+    };
+    
+    
+    
+    /*
+     * public void saveLocalStorageData(data)
+     *
+     *  stores game data into local storage
+     *
+     */
+    game.prototype.saveLocalStorageData = function(data) {
+        
+        if (typeof data === "string") {
+            // if data was stringified already, store it as it is
+            window.localStorage.setItem(localStorageKey, data);
+        } else if (typeof data === "object") {
+            // otherwise, stringify before storing
+            window.localStorage.setItem(localStorageKey, JSON.stringify(data));
+        }
         
     }
     

@@ -108,9 +108,9 @@ GAME.MODE = (function(mode) {
             // track "flap history"
             if (!yacopu.goal) {
                 flapHistory.push(raceTime);
-            } else {
-                console.log(JSON.stringify(flapHistory));
-            }
+            }// else {
+            //    console.log(JSON.stringify(flapHistory));
+            //}
             
             // create new random particles
             for (var i = 0; i < 4; i++) {
