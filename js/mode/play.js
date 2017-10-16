@@ -31,6 +31,9 @@ GAME.MODE = (function(mode) {
     // collection of particles
     var particleCollection = [];
     
+    // buttons
+    var buttons = [];
+    
     
     
     /*
@@ -51,13 +54,15 @@ GAME.MODE = (function(mode) {
         yacopu = new GAME.YACOPU();
         yacopu.level = level;
         
-        // Initialize timer variables
+        // initialize buttons
+        buttons.restart = new GAME.BUTTON(640 - 32 - 16, 16, 32, 32);
+        buttons.restart.image = new Image();
+        
+        // Initialize game variables
         raceTime = 0;
-        countdownTime = 60 * 3;
+        countdownTime = (60 * 4) - 1;
         initialTimeStamp = game.getTicks();
-        
         hasRaceStarted = false;
-        
         flapHistory = [];
     };
     
@@ -105,7 +110,11 @@ GAME.MODE = (function(mode) {
             yacopu.flap(game);
             
             // track "flap history"
-            if (!yacopu.goal) flapHistory.push(raceTime);
+            if (!yacopu.goal) {
+                flapHistory.push(raceTime);
+            } else {
+                console.log(flapHistory);
+            }
             
             // create new random particles
             for (var i = 0; i < 8; i++) {
@@ -117,15 +126,10 @@ GAME.MODE = (function(mode) {
         // count a bonk
         if (yacopu.isBonking) {
             
+            // create particles
             particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
             particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
-            // create new random particles
-            /*
-            for (var i = 0; i < 2; i++) {
-                var newParticle = new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" });
-                particleCollection.push(newParticle);
-            };
-            */
+
         }
             
         // scroll screen if needed
@@ -138,6 +142,10 @@ GAME.MODE = (function(mode) {
         if (!yacopu.goal) {
             raceTime++;
         }
+        
+        // update buttons
+        buttons.restart.update(input);
+        if (buttons.restart.click) {console.log("this is the restart level button");}
     };
     
     
@@ -152,6 +160,9 @@ GAME.MODE = (function(mode) {
         // display level and yacopu
         level.render(context, scrollX);
         yacopu.render(context, scrollX);
+        
+        // display button
+        buttons.restart.render(context, "#FF0000");
         
         // display particles
         for(var i = particleCollection.length - 1; i >= 0; i--) {
