@@ -33,8 +33,8 @@ var GAME = (function () {
         callback: null
     };
     
-    // curtain object used to transition between modes
-    //var curtain;
+    // particles collection
+    var particles = [];
     
     
 
@@ -46,8 +46,12 @@ var GAME = (function () {
      */
     var game = function () {
         
+        // set size
+        this.width = 640;
+        this.height = 360;
+        
         // Create and configure display
-        display = new HYNE(640, 360)
+        display = new HYNE(this.width, this.height)
             .appendTo(document.body);
         
         // Set update and render methods
@@ -98,6 +102,8 @@ var GAME = (function () {
                 mode = newMode;
             } else {
                 // fade mode - set via fade out -(mode change)-> fade in
+                // first, prevent a mode change if a fadeout is already taking place
+                if (fade.active) return null;
                 fade.active = true;
                 fade.direction = -1;
                 fade.step = 4;
@@ -187,8 +193,13 @@ var GAME = (function () {
         // call render method depending on mode
         GAME.MODE[mode].render(context);
         
-        // render curtain
-        //curtain.render(context);
+        // display particles
+        for(var i = particles.length - 1; i >= 0; i--) {
+            var thisParticle = particles[i];
+            // call their render method
+            thisParticle.render(context, scrollX);
+            
+        };
         
         // Display screen resolution
         context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
