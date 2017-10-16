@@ -76,7 +76,15 @@ GAME.MODE = (function(mode) {
      */
     play.update = function(input) {
         
-        // do nothing until actual race has started
+        // update particles
+        GAME.PARTICLE.updateAll(particles, game);
+        
+        // create random "cloud" particles for testing every 16 frames
+        if (game.getTicks() % 16 == 0) {
+            particles.push(new GAME.PARTICLE(game.width + scrollX, 2 * Math.round(Math.random() * 64 + 32), { template: "cloud" }));
+        };
+        
+        // do nothing more until actual race has started
         if (!hasRaceStarted) {
             // count every 60 frames
             if ((countdownTime % 60) === 0)
@@ -92,8 +100,6 @@ GAME.MODE = (function(mode) {
         // update yacopu movement
         yacopu.update(game);
         
-        // update particles
-        GAME.PARTICLE.updateAll(particles, game);
         
         // flap if a touch occured on this frame
         if (input.touch.click) {
@@ -132,7 +138,7 @@ GAME.MODE = (function(mode) {
         
         // update buttons
         buttons.restart.update(input);
-        if (buttons.restart.click) {console.log("this is the restart level button");}
+        if (buttons.restart.release) {console.log("this is the restart level button");}
     };
     
     

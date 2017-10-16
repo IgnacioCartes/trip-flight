@@ -190,6 +190,9 @@ var GAME = (function () {
         // set alpha depending on fade status
         context.globalAlpha = fade.step / 4;
         
+        // set default color to black
+        context.fillStyle = "#000000";
+        
         // call render method depending on mode
         GAME.MODE[mode].render(context);
         

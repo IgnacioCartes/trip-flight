@@ -59,6 +59,31 @@ GAME.PARTICLE = (function() {
             // display
             this.display = "image";
             this.image = "bonkstar";
+        },
+        // cloud -- appear on some levels as decoration
+        "cloud": function(args) {
+            
+            // size
+            this.width = 48;
+            this.height = 2;
+            
+            // move from right to left
+            this.speedX = -8;
+            this.speedY = 0;
+            
+            // no acceleration
+            this.accelX = 0;
+            this.accelY = 0;
+            
+            // kill when it scrolls offscreen
+            this.killCondition = function() {
+                if (this.displayX < -this.width) {
+                    return true;
+                }
+            };
+            
+            // display
+            this.color = "#c0c0c0";
         }
     };
     
@@ -79,6 +104,7 @@ GAME.PARTICLE = (function() {
         // otherwise initialize everything to null
         if (args.template && (typeof templates[args.template] === "function")) {
             templates[args.template].bind(this)(args);
+            this.template = args.template;
         } else {
             this.speedX = 0;
             this.speedY = 0;
@@ -90,6 +116,7 @@ GAME.PARTICLE = (function() {
             };
             
             this.color = "#000000";
+            this.template = null;
         }
         
         this.evenOnly = true;
@@ -123,6 +150,10 @@ GAME.PARTICLE = (function() {
             thisy = 2 * Math.round((thisy) / 2) + 2;
         }
         
+        // store its displayed position if needed by the update method
+        this.displayX = thisx;
+        this.displayY = thisy;
+        
         // don't bother drawing if they're offscreen
         if ((thisx < -8) || (thisy < -8)) return null;
         
@@ -133,10 +164,8 @@ GAME.PARTICLE = (function() {
         } else {
             // default display - a box
             context.fillStyle = this.color || "#000000";
-            context.fillRect(thisx, thisy, 8, 8);
-            
+            context.fillRect(thisx, thisy, this.width, this.height);   
         }
-        
     };
     
     
@@ -205,6 +234,9 @@ GAME.PARTICLE = (function() {
             // call their render method
             particles[i].render(context, scrollX);
         };
+        
+        // debug
+        context.fillText("particles rendered: " + particles.length.toString(), 16, 256)
     }
     
     
@@ -212,7 +244,7 @@ GAME.PARTICLE = (function() {
     /*
      * public static void .updateAll(particles, game)
      *
-     *  updates all particles
+     *  updates all particles, removing dead ones from the array
      *
      */
     particle.updateAll = function (particles, game) {
