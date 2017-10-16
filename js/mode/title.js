@@ -37,12 +37,15 @@ GAME.MODE = (function(mode) {
         // Create and position buttons
         buttons.stage_select = new GAME.BUTTON(320 - 96, 176, 192, 32);
         buttons.stage_select.image = new Image();
+        buttons.stage_select.text = "Stage Selection";
             
         buttons.best_times = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.best_times.image = new Image();
+        buttons.best_times.text = "Leaderboards";
             
         buttons.about = new GAME.BUTTON(320 - 96, 272, 192, 32);
         buttons.about.image = new Image();
+        buttons.about.text = "About";
         
     };
     

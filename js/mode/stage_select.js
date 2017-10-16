@@ -41,17 +41,20 @@ GAME.MODE = (function(mode) {
             
         buttons.play = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.play.image = new Image();
-        buttons.play.text = selectedLevel.toString();
+        buttons.play.text = "Level " + selectedLevel.toString();
         
         buttons.previous = new GAME.BUTTON(320 - 96 - 96, 224 - 16, 64, 64);
         buttons.previous.image = new Image();
+        buttons.previous.text = "<";
         
         buttons.next = new GAME.BUTTON(320 + 96 + 32, 224 - 16, 64, 64);
         buttons.next.image = new Image();
+        buttons.next.text = ">";
         
             
         buttons.title = new GAME.BUTTON(320 - 96, 272, 192, 32);
         buttons.title.image = new Image();
+        buttons.title.text = "Title Screen";
         
     };
     
@@ -81,12 +84,12 @@ GAME.MODE = (function(mode) {
         if (buttons.previous.release) {
             selectedLevel--;
             if (selectedLevel === 0) selectedLevel = game.save.levelsUnlocked;
-            buttons.play.text = selectedLevel.toString();
+            buttons.play.text = "Level " + selectedLevel.toString();
         };
         if (buttons.next.release) {
             selectedLevel++;
             if (selectedLevel > game.save.levelsUnlocked) selectedLevel = 1;
-            buttons.play.text = selectedLevel.toString();
+            buttons.play.text = "Level " + selectedLevel.toString();
         }
         
     };
