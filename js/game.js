@@ -33,9 +33,6 @@ var GAME = (function () {
         callback: null
     };
     
-    // particles collection
-    var particles = [];
-    
     
 
     /*
@@ -58,16 +55,10 @@ var GAME = (function () {
         display.setUpdate(updateWrapper)
             .setRender(renderWrapper);
         
-        // create curtain to be used to transition modes
-        //curtain = new GAME.CURTAIN();
-        
-        //curtain.activate("tiled", null, { direction: "in" });
-        
         // Set initial mode
-        //set.intro();
         this.setMode("TITLE", { nofade: true });
         
-        // Start the display
+        // Initialize the display
         display.run();
         
         // share save data
@@ -104,6 +95,8 @@ var GAME = (function () {
                 // fade mode - set via fade out -(mode change)-> fade in
                 // first, prevent a mode change if a fadeout is already taking place
                 if (fade.active) return null;
+                
+                // set and initiate the fade cycle with the callback to change mode in between
                 fade.active = true;
                 fade.direction = -1;
                 fade.step = 4;
@@ -117,8 +110,6 @@ var GAME = (function () {
 
             }
         }
-        
-        
     };
     
     
@@ -146,11 +137,6 @@ var GAME = (function () {
         // call update method depending on mode
         GAME.MODE[mode].update(input);
         
-        // update curtain
-        //curtain.update(input);
-        // end at 600 ticks (10~ seconds)
-        //if (this.getTicks() === 600) { display.stop(); }
-        
         // handle fade in/outs
         if (fade.active) {
             fade.counter++;
@@ -163,7 +149,7 @@ var GAME = (function () {
                 // check if fade needs to end
                 if ((fade.step === 0) || (fade.step === 4)) {
                     fade.active = false;
-                    // do a callback function if one was specified
+                    // execute callback function if one was specified
                     if (typeof fade.callback === "function") {
                         fade.callback();
                         fade.callback = null;
@@ -196,19 +182,8 @@ var GAME = (function () {
         // call render method depending on mode
         GAME.MODE[mode].render(context);
         
-        // display particles
-        for(var i = particles.length - 1; i >= 0; i--) {
-            var thisParticle = particles[i];
-            // call their render method
-            thisParticle.render(context, scrollX);
-            
-        };
-        
         // Display screen resolution
         context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
-        
-        // show ticks on div
-        //document.getElementById("log").innerHTML = this.getTicks();
         
     }
     
