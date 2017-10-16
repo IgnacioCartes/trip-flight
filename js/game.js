@@ -6,6 +6,9 @@ var GAME = (function () {
      * GAME VARIABLES
      */
     
+    // reference to this instance
+    var gameInstance;
+    
     // (a very basic) display and timing module - managed by hyne.js
     var display;
     
@@ -19,6 +22,19 @@ var GAME = (function () {
             500
         ]
     };
+    
+    // fade - handles fade in/outs for game mode transitions
+    var fade = {
+        active: false,
+        direction: 0,
+        step: 0,
+        counter: 0,
+        maxCounter: 10,
+        callback: null
+    };
+    
+    // curtain object used to transition between modes
+    //var curtain;
     
     
 
@@ -38,15 +54,28 @@ var GAME = (function () {
         display.setUpdate(updateWrapper)
             .setRender(renderWrapper);
         
+        // create curtain to be used to transition modes
+        //curtain = new GAME.CURTAIN();
+        
+        //curtain.activate("tiled", null, { direction: "in" });
+        
         // Set initial mode
         //set.intro();
-        this.setMode("TITLE");
+        this.setMode("TITLE", { nofade: true });
         
         // Start the display
         display.run();
         
         // share save data
         this.save = save;
+        
+        // set initial fadein
+        fade.active = true;
+        fade.direction = 1;
+        fade.step = 0;
+        
+        // save a reference to this game instance
+        gameInstance = this;
         
     };
     
@@ -63,9 +92,26 @@ var GAME = (function () {
         console.log("setting mode " + newMode);
         
         if (GAME.MODE[newMode]) {
-            GAME.MODE[newMode].set(this, argsObj);
-            mode = newMode;
-        };
+            if (argsObj.nofade) {
+                // nofade mode - set mode right away
+                GAME.MODE[newMode].set(this, argsObj);
+                mode = newMode;
+            } else {
+                // fade mode - set via fade out -(mode change)-> fade in
+                fade.active = true;
+                fade.direction = -1;
+                fade.step = 4;
+                fade.callback = function() {
+                    fade.active = true;
+                    fade.direction = 1;
+                    fade.step = 0;
+                    GAME.MODE[newMode].set(gameInstance, argsObj);
+                    mode = newMode;
+                };
+
+            }
+        }
+        
         
     };
     
@@ -94,8 +140,31 @@ var GAME = (function () {
         // call update method depending on mode
         GAME.MODE[mode].update(input);
         
+        // update curtain
+        //curtain.update(input);
         // end at 600 ticks (10~ seconds)
         //if (this.getTicks() === 600) { display.stop(); }
+        
+        // handle fade in/outs
+        if (fade.active) {
+            fade.counter++;
+            if (fade.counter >= fade.maxCounter) {
+                // new step change
+                fade.counter = 0;
+                fade.opacityChange = true;
+                fade.step += fade.direction;
+                
+                // check if fade needs to end
+                if ((fade.step === 0) || (fade.step === 4)) {
+                    fade.active = false;
+                    // do a callback function if one was specified
+                    if (typeof fade.callback === "function") {
+                        fade.callback();
+                        fade.callback = null;
+                    }
+                }
+            }
+        }
         
     }
     
@@ -112,11 +181,14 @@ var GAME = (function () {
         // clear buffer before calling individual function for each mode
         this.clearBuffer();
         
-        // make sure global alpha is set to 1
-        context.globalAlpha = 1;
+        // set alpha depending on fade status
+        context.globalAlpha = fade.step / 4;
         
         // call render method depending on mode
         GAME.MODE[mode].render(context);
+        
+        // render curtain
+        //curtain.render(context);
         
         // Display screen resolution
         context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
