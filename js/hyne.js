@@ -72,7 +72,6 @@
         newENV.canvas.main.id = this.__id;
         
         newENV.fps = 60;
-        
         newENV.ticks = 0;
         
         newENV.input = {
@@ -94,9 +93,9 @@
             });
             newENV.canvas.main.addEventListener('touchend', function(e) {
                 ENV[this.id].input.touch.active = false;
-                ENV[this.id].input.touch.release = false;
-                ENV[this.id].input.touch.x = e.touches[0].pageX * ENV[this.id].touchScaling.x;
-                ENV[this.id].input.touch.y = e.touches[0].pageY * ENV[this.id].touchScaling.y;
+                ENV[this.id].input.touch.release = true;
+                ENV[this.id].input.touch.x = e.changedTouches[0].pageX * ENV[this.id].touchScaling.x;
+                ENV[this.id].input.touch.y = e.changedTouches[0].pageY * ENV[this.id].touchScaling.y;
                 ENV[this.id].input.touch.tick = ENV[this.id].ticks;
                 e.preventDefault();
             });

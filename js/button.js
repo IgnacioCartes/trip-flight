@@ -49,6 +49,10 @@ GAME.BUTTON = (function() {
         if (strokeStyle) {
             var storeStrokeStyle = context.strokeStyle;
             context.strokeStyle = strokeStyle;
+            // draw full box if active
+            if (this.active)
+                context.fillRect(this.x, this.y, this.width, this.height);
+            
             context.strokeRect(this.x, this.y, this.width, this.height);
             
             context.strokeStyle = storeStrokeStyle;
@@ -83,6 +87,9 @@ GAME.BUTTON = (function() {
             this.click = input.touch.click;
             this.active = input.touch.active;
         };
+        
+        // On release, disactive all
+        if (input.touch.release) this.active = false;
         
     };
     
