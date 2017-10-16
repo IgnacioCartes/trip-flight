@@ -4,12 +4,18 @@ GAME.PARTICLE = (function() {
     /*
      * Global variables and constants
      */
-    var image;
+    
+    // imagebank for particles
+    var images = [];
     
     // templates
     var templates = {
-        // touchsparkles -- are created when the player taps on the screen during play mode
-        "touchsparkle": function() {
+        // touchsparkle -- created when the player taps on the screen during play mode
+        "touchsparkle": function(args) {
+            
+            // load image
+            this.loadImage("touchsparkle", "assets/touchsparkle.png");
+            
             // random initial speeds
             this.speedX = (Math.random() * 8) - 4;
             this.speedY = (Math.random() * 8) - 4;
@@ -24,7 +30,35 @@ GAME.PARTICLE = (function() {
             };
             
             // display
-            this.color = "#ffe740";
+            this.display = "image";
+            this.image = "touchsparkle";
+        },
+        // bonkstar -- created when the player bonks face first against a wall
+        "bonkstar": function(args) {
+            
+            // load image
+            this.loadImage("bonkstar", "assets/bonkstar.png");
+            
+            // size
+            this.width = 16;
+            this.height = 16;
+            
+            // to the sides
+            this.speedX = -2;
+            this.speedY = args.y;
+            
+            // acceleration to cancel speed
+            this.accelX = 0.1;
+            this.accelY = -(args.y / 20);
+            
+            // kill after 20 frames
+            this.killCondition = function() {
+                if (this.lifespan > 20) return true;
+            };
+            
+            // display
+            this.display = "image";
+            this.image = "bonkstar";
         }
     };
     
@@ -44,7 +78,7 @@ GAME.PARTICLE = (function() {
         // if there was a valid template provided, use it
         // otherwise initialize everything to null
         if (args.template && (typeof templates[args.template] === "function")) {
-            templates[args.template].bind(this)();
+            templates[args.template].bind(this)(args);
         } else {
             this.speedX = 0;
             this.speedY = 0;
@@ -92,9 +126,16 @@ GAME.PARTICLE = (function() {
         // don't bother drawing if they're offscreen
         if ((thisx < -8) || (thisy < -8)) return null;
         
-        // draw
-        context.fillStyle = this.color || "#000000";
-        context.fillRect(thisx, thisy, 8, 8);
+        // display
+        if (this.display === "image") {
+            // draw image
+            context.drawImage(images[this.image], thisx, thisy);
+        } else {
+            // default display - a box
+            context.fillStyle = this.color || "#000000";
+            context.fillRect(thisx, thisy, 8, 8);
+            
+        }
         
     };
     
@@ -127,6 +168,24 @@ GAME.PARTICLE = (function() {
         
         // kill particle one its kill condition is true
         if (this.killCondition()) this.alive = false;
+        
+    };
+    
+    
+    
+    /*
+     * public void .loadImage(id, url, override)
+     *
+     *  loads an asset into the static image container to be used by particles
+     *
+     */
+    particle.prototype.loadImage = function (id, url, override) {
+        
+        // check if image hasn't been loaded (or if override is true)
+        if ((images[id] === undefined) || (override)) {
+            images[id] = new Image();
+            images[id].src = url;
+        };
         
     };
     

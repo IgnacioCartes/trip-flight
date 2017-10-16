@@ -73,6 +73,7 @@ GAME.YACOPU = (function() {
         
         this.maxSpeed = 0;
         this.bonks = 0;
+        this.isBonking = false;
         
         this.animation = {
             name: "",
@@ -152,6 +153,9 @@ GAME.YACOPU = (function() {
         
         // get ticks
         var ticks = game.getTicks();
+        
+        // initialize some variables
+        this.isBonking = false;
         
         // Determine relevant surroundings (tiles below and ahead)
         var tileUnder = this.level.tileAt(this, 16, 32);
@@ -238,7 +242,7 @@ GAME.YACOPU = (function() {
             // if we were going too fast, count this as a "bonk"
             if (this.speedX >= 16) {
                 this.bonks++;
-                console.log("bonk!");
+                this.isBonking = true;
             }
             
             // determine whether to bounce or fullstop

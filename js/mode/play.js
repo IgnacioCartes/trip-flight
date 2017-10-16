@@ -113,6 +113,20 @@ GAME.MODE = (function(mode) {
                 particleCollection.push(newParticle);
             };
         }
+        
+        // count a bonk
+        if (yacopu.isBonking) {
+            
+            particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
+            particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
+            // create new random particles
+            /*
+            for (var i = 0; i < 2; i++) {
+                var newParticle = new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" });
+                particleCollection.push(newParticle);
+            };
+            */
+        }
             
         // scroll screen if needed
         if ((yacopu.x - scrollX) > 240) scrollX = Math.floor(yacopu.x - 240);
