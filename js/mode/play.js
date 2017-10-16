@@ -29,7 +29,7 @@ GAME.MODE = (function(mode) {
     var flapHistory = [];
     
     // collection of particles
-    var particleCollection = [];
+    var particles = [];
     
     // buttons
     var buttons = [];
@@ -93,18 +93,8 @@ GAME.MODE = (function(mode) {
         yacopu.update(game);
         
         // update particles - go through loop in reverse order
-        for(var i = particleCollection.length - 1; i >= 0; i--) {
-            var thisParticle = particleCollection[i];
-            // call their update method
-            thisParticle.update(game);
-            
-            // splice particle away if its dead
-            if (!thisParticle.alive) {
-                particleCollection.splice(i, 1);
-            }
-            
-        };
-            
+        GAME.PARTICLE.updateAll(particles, game);
+        
         // flap if a touch occured on this frame
         if (input.touch.click) {
             yacopu.flap(game);
@@ -113,13 +103,12 @@ GAME.MODE = (function(mode) {
             if (!yacopu.goal) {
                 flapHistory.push(raceTime);
             } else {
-                console.log(flapHistory);
+                console.log(JSON.stringify(flapHistory));
             }
             
             // create new random particles
             for (var i = 0; i < 8; i++) {
-                var newParticle = new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" });
-                particleCollection.push(newParticle);
+                particles.push(new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" }));
             };
         }
         
@@ -127,9 +116,11 @@ GAME.MODE = (function(mode) {
         if (yacopu.isBonking) {
             
             // create particles
-            particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
-            particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
-
+            //particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
+            particles.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
+            //particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
+            particles.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
+            
         }
             
         // scroll screen if needed
@@ -165,13 +156,9 @@ GAME.MODE = (function(mode) {
         buttons.restart.render(context, "#FF0000");
         
         // display particles
-        for(var i = particleCollection.length - 1; i >= 0; i--) {
-            var thisParticle = particleCollection[i];
-            // call their render method
-            thisParticle.render(context, scrollX);
-            
-        };
+        GAME.PARTICLE.renderAll(particles, context, scrollX);
         
+        // get race time
         var roundraceTime = Math.round((raceTime / 60) * 100) / 100;
         
         context.fillStyle = "#3377BB";

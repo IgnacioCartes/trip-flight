@@ -167,7 +167,9 @@ GAME.PARTICLE = (function() {
         this.lifespan++;
         
         // kill particle one its kill condition is true
-        if (this.killCondition()) this.alive = false;
+        if (this.killCondition(game))  {
+            this.alive = false;
+        }
         
     };
     
@@ -188,6 +190,44 @@ GAME.PARTICLE = (function() {
         };
         
     };
+    
+    
+    
+    /*
+     * public static void .renderAll(particles, context, scrollX)
+     *
+     *  renders all particles in an array to a given context
+     *
+     */
+    particle.renderAll = function (particles, context, scrollX) {
+        // iterate thru particles array, rendering them all
+        for(var i = particles.length - 1; i >= 0; i--) {
+            // call their render method
+            particles[i].render(context, scrollX);
+        };
+    }
+    
+    
+    
+    /*
+     * public static void .updateAll(particles, game)
+     *
+     *  updates all particles
+     *
+     */
+    particle.updateAll = function (particles, game) {
+        // iterate thru particles array in reverse order, updating them all
+        for(var i = particles.length - 1; i >= 0; i--) {
+            var thisParticle = particles[i];
+            // call their update method
+            thisParticle.update(game);
+            
+            // splice particle away if its dead
+            if (!thisParticle.alive) {
+                particles.splice(i, 1);
+            }
+        };
+    }
     
     
     
