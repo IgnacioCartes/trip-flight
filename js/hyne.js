@@ -79,43 +79,49 @@
             touch: {}
         };
         
-        // Create touch listeners
+        // Create touch listeners -- click or touch, depending on running environment:
         if (navigator.isCocoonJS) {
-            newENV.canvas.main.addEventListener('touchstart', touchstart);
-            newENV.canvas.main.addEventListener('touchend', touchend);
+            newENV.canvas.main.addEventListener('touchstart', function(e) {
+                ENV[this.id].input.touch = {
+                    x: e.touches[0].pageX * ENV[this.id].touchScaling.x,
+                    y: e.touches[0].pageY * ENV[this.id].touchScaling.y,
+                    tick: ENV[this.id].ticks,
+                    active: true,
+                    click: true,
+                    release: false
+                };
+                e.preventDefault();
+            });
+            newENV.canvas.main.addEventListener('touchend', function(e) {
+                ENV[this.id].input.touch.active = false;
+                ENV[this.id].input.touch.release = false;
+                ENV[this.id].input.touch.x = e.touches[0].pageX * ENV[this.id].touchScaling.x;
+                ENV[this.id].input.touch.y = e.touches[0].pageY * ENV[this.id].touchScaling.y;
+                ENV[this.id].input.touch.tick = ENV[this.id].ticks;
+                e.preventDefault();
+            });
+            
+            // not CocoonJS (browsers)
         } else {
-            newENV.canvas.main.addEventListener('mousedown', mousedown);
-            newENV.canvas.main.addEventListener('mouseup', touchend);
-        }
-        
-        // mouse/touch functions
-        function mousedown(e) {
-            ENV[this.id].input.touch = {
-                x: e.x,
-                y: e.y,
-                tick: ENV[this.id].ticks,
-                active: true,
-                click: true
-            };
-            e.preventDefault();
-        }
-        
-        function touchstart(e) {
-            ENV[this.id].input.touch = {
-                x: e.touches[0].pageX * ENV[this.id].touchScaling.x,
-                y: e.touches[0].pageY * ENV[this.id].touchScaling.y,
-                tick: ENV[this.id].ticks,
-                active: true,
-                click: true
-            };
-            //console.log(e.touches[0].pageX * ENV[this.id].touchScaling.x)
-            e.preventDefault();
-        }
-        
-        
-        function touchend(e) {
-            ENV[this.id].input.touch.active = false;
-            e.preventDefault();
+            newENV.canvas.main.addEventListener('mousedown', function(e) {
+                ENV[this.id].input.touch = {
+                    x: e.x,
+                    y: e.y,
+                    tick: ENV[this.id].ticks,
+                    active: true,
+                    click: true,
+                    release: false
+                };
+                e.preventDefault();
+            });
+            newENV.canvas.main.addEventListener('mouseup', function(e) {
+                ENV[this.id].input.touch.active = false;
+                ENV[this.id].input.touch.release = true;
+                ENV[this.id].input.touch.x = e.x;
+                ENV[this.id].input.touch.y = e.y;
+                ENV[this.id].input.touch.tick = ENV[this.id].ticks;
+                e.preventDefault();
+            });
         }
         
         // Push new environment
@@ -147,9 +153,6 @@
             ENV[this.__id].touchScaling.x = ENV[this.__id].width / window.innerWidth;
             ENV[this.__id].touchScaling.y = ENV[this.__id].height / window.innerHeight;
             
-            //console.log(ENV[this.__id].touchScaling.x.toString());
-            //console.log(ENV[this.__id].touchScaling.y.toString());
-            
             ENV[this.__id].canvas.main.style.width = window.innerWidth.toString() + "px";
             ENV[this.__id].canvas.main.style.height = window.innerHeight.toString() + "px";
         }
@@ -159,17 +162,6 @@
         
         return this;
     };
-    
-    /*
-    HYNE.prototype.setFPS = function(fps) {
-        if (typeof fps !== 'number') {
-            this.error("You must specify a number!");
-            return null;
-        }
-        ENV[this.__id].fps = fps;
-        return this;
-    };
-    */
     
     HYNE.prototype.setUpdate = function(updateMethod) {
         if (typeof updateMethod !== 'function') {
@@ -245,6 +237,7 @@
         env.render.bind(env.game, env.canvas.bufferCtx)();
         
         env.input.touch.click = false;
+        env.input.touch.release = false;
         
         // rerequest a new animation frame
         if (this.animation) window.requestAnimationFrame(frame.bind(this, env));

@@ -92,7 +92,7 @@ GAME.MODE = (function(mode) {
         // update yacopu movement
         yacopu.update(game);
         
-        // update particles - go through loop in reverse order
+        // update particles
         GAME.PARTICLE.updateAll(particles, game);
         
         // flap if a touch occured on this frame
@@ -107,23 +107,19 @@ GAME.MODE = (function(mode) {
             }
             
             // create new random particles
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < 4; i++) {
                 particles.push(new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" }));
             };
         }
         
         // count a bonk
         if (yacopu.isBonking) {
-            
             // create particles
-            //particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
             particles.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: -2 }));
-            //particleCollection.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
             particles.push(new GAME.PARTICLE(yacopu.x + 32, yacopu.y + 16, { template: "bonkstar", y: 2 }));
-            
         }
-            
-        // scroll screen if needed
+        
+        // screen scroll
         if ((yacopu.x - scrollX) > 240) scrollX = Math.floor(yacopu.x - 240);
             
         // Make sure we don't scroll TOO much though

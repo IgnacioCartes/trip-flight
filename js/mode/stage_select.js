@@ -72,18 +72,18 @@ GAME.MODE = (function(mode) {
         buttons.title.update(input);
             
         // Play the selected level...
-        if (buttons.play.click) game.setMode("PLAY", { level: selectedLevel });
+        if (buttons.play.release) game.setMode("PLAY", { level: selectedLevel });
         
         // ...or go back to title screen
-        if (buttons.title.click) game.setMode("TITLE");
+        if (buttons.title.release) game.setMode("TITLE");
         
         // level selectors - previous and next
-        if (buttons.previous.click) {
+        if (buttons.previous.release) {
             selectedLevel--;
             if (selectedLevel === 0) selectedLevel = game.save.levelsUnlocked;
             buttons.play.text = selectedLevel.toString();
         };
-        if (buttons.next.click) {
+        if (buttons.next.release) {
             selectedLevel++;
             if (selectedLevel > game.save.levelsUnlocked) selectedLevel = 1;
             buttons.play.text = selectedLevel.toString();

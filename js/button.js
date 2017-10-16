@@ -79,6 +79,7 @@ GAME.BUTTON = (function() {
            && (input.touch.y >= this.y)
            && (input.touch.x <= (this.x + this.width))
            && (input.touch.y <= (this.y + this.height))) {
+            this.release = input.touch.release && this.active;
             this.click = input.touch.click;
             this.active = input.touch.active;
         };
