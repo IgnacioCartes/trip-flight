@@ -113,9 +113,11 @@ GAME.MODE = (function(mode) {
             //}
             
             // create new random particles
+            /*
             for (var i = 0; i < 4; i++) {
                 particles.push(new GAME.PARTICLE(input.touch.x + scrollX, input.touch.y, { template: "touchsparkle" }));
             };
+            */
         }
         
         // count a bonk
