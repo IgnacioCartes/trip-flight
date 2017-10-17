@@ -126,7 +126,6 @@ GAME.YACOPU = (function() {
         context.drawImage(image, animPos, 0, 32, 32, thisx, thisy, 32, 32);
         
         // debug
-        context.font = "12px Arial";
         context.fillStyle = "#543210";
         context.fillText("speed: " + this.speedX.toString() + ", " + this.speedY.toString(), 0, 16);
         context.fillText("position: " + this.x.toString() + ", " + this.y.toString(), 0, 32);
