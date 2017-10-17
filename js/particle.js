@@ -68,7 +68,7 @@ GAME.PARTICLE = (function() {
             this.height = 2;
             
             // move from right to left
-            this.speedX = -8;
+            this.speedX = -4 - (Math.floor(Math.random() * 3));
             this.speedY = 0;
             
             // no acceleration
