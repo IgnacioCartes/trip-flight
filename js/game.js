@@ -172,8 +172,9 @@ var GAME = (function () {
         // set alpha depending on fade status
         context.globalAlpha = fade.step / 4;
         
-        // set default color to black
+        // set default color and font
         context.fillStyle = "#000000";
+        context.font = "10px EarlyGameboy";
         
         // call render method depending on mode
         GAME.MODE[mode].render(context);
