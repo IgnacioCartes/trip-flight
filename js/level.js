@@ -44,6 +44,14 @@ GAME.LEVEL = (function() {
             color: "#998877",
             solid: false,
             slope: 1
+        },
+        "boostfwd":
+        {
+            color: "#77aa77",
+            solid: false,
+            boost: true,
+            boostX: 1,
+            boosyY: 0
         }
     };
     

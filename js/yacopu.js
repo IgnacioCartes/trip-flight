@@ -160,6 +160,7 @@ GAME.YACOPU = (function() {
         var tileUnder = this.level.tileAt(this, 16, 32);
         var tileAbove = this.level.tileAt(this, 16, 0);
         var tileAhead = this.level.tileAt(this, 32, 16);
+        var tileIn = this.level.tileAt(this, 16, 16);
         
         // Horizontal deacceleration every 16 frames
         if ((ticks % 16) === 0) {
@@ -169,6 +170,12 @@ GAME.YACOPU = (function() {
         
         // Gravity
         if (this.speedY < 24) this.speedY++;
+        
+        // if at boost tile, boost
+        if (tileIn.boost) {
+            this.speedX += (tileIn.boostX || 0);
+            this.speedY += (tileIn.boostY || 0);
+        };
         
         // if standing on ground, cancel Y acceleration if positive
         if (tileUnder.solid) {
