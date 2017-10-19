@@ -38,13 +38,6 @@ GAME.BUTTON = (function() {
         // Ignore is button visibility is set to false
         if (!this.visible) return null;
         
-        // Draw image if one was added to the button object
-        if (this.image && (typeof this.image === "object")) {
-            if (this.image.complete) {
-                context.drawImage(this.image, this.x, this.y);
-            }
-        }
-        
         // Draw box if a strokestyle was provided
         if (strokeStyle) {
             var storeStrokeStyle = context.strokeStyle;
@@ -56,6 +49,13 @@ GAME.BUTTON = (function() {
             context.strokeRect(this.x, this.y, this.width, this.height);
             
             context.strokeStyle = storeStrokeStyle;
+        }
+        
+        // Draw image if one was added to the button object
+        if (this.image && (typeof this.image === "object")) {
+            if (this.image.complete) {
+                context.drawImage(this.image, this.x, this.y, this.width, this.height);
+            }
         }
         
         // Draw text if there is any

@@ -7,7 +7,7 @@ GAME.MODE = (function(mode) {
      */
     
     // module
-    var best_times = {};
+    var records = {};
     
     // reference to main game object
     var game;
@@ -15,7 +15,7 @@ GAME.MODE = (function(mode) {
     
     
     // Return object to global namespace
-    mode.BEST_TIMES = best_times;
+    mode.RECORDS = records;
     return mode;
     
 }(GAME.MODE || {}));

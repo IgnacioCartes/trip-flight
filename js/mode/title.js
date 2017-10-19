@@ -37,14 +37,17 @@ GAME.MODE = (function(mode) {
         // Create and position buttons
         buttons.stage_select = new GAME.BUTTON(320 - 96, 176, 192, 32);
         buttons.stage_select.image = new Image();
-        buttons.stage_select.text = "Stage Selection";
+        buttons.stage_select.image.src = "assets/images/buttons/start.png";
+        buttons.stage_select.text = "Start";
             
-        buttons.best_times = new GAME.BUTTON(320 - 96, 224, 192, 32);
-        buttons.best_times.image = new Image();
-        buttons.best_times.text = "Leaderboards";
+        buttons.records = new GAME.BUTTON(320 - 96, 224, 192, 32);
+        buttons.records.image = new Image();
+        buttons.records.image.src = "assets/images/buttons/records.png";
+        buttons.records.text = "Records";
             
         buttons.about = new GAME.BUTTON(320 - 96, 272, 192, 32);
         buttons.about.image = new Image();
+        buttons.about.image.src = "assets/images/buttons/about.png";
         buttons.about.text = "About";
         
     };
@@ -78,9 +81,9 @@ GAME.MODE = (function(mode) {
     title.render = function(context) {
         
         level.render(context, 0);
-        buttons.stage_select.render(context, "#FF0000");
-        buttons.best_times.render(context, "#FF0000");
-        buttons.about.render(context, "#FF0000");
+        buttons.stage_select.render(context);
+        buttons.records.render(context);
+        buttons.about.render(context);
         
     };
     
