@@ -218,6 +218,9 @@ GAME.LEVEL = (function() {
             // goal
             instance.goal = data.goal;
             
+            // particle generator
+            instance.particleGenerator = data.particleGenerator;
+            
             // tile properties
             tileProperties = [];
             for (var i = 0, l = data.tileProperties.length; i < l; i++) {
