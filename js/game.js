@@ -21,7 +21,7 @@ var GAME = (function () {
         direction: 0,
         step: 0,
         counter: 0,
-        maxCounter: 10,
+        maxCounter: 5,
         callback: null
     };
     
@@ -125,6 +125,18 @@ var GAME = (function () {
     
     
     /*
+     * public bool .isFade()
+     *
+     *  returns whether there is a fade effect taking place
+     *
+     */
+    game.prototype.isFade = function () {
+        return fade.active;
+    };
+    
+    
+    
+    /*
      * private void updateWrapper(input)
      *
      *  function passed to display, called on each frame to handle update of game objects
@@ -176,7 +188,7 @@ var GAME = (function () {
         
         // set default color and font
         context.fillStyle = "#000000";
-        context.font = "10px EarlyGameboy";
+        context.font = "16px EarlyGameboy";
         
         // call render method depending on mode
         GAME.MODE[mode].render(context);

@@ -2,6 +2,14 @@ GAME.BUTTON = (function() {
     'use strict';
     
     /*
+     * Global variables and constants
+     */
+    
+    // text offsets
+    var textOffsetY = 16;
+    
+    
+    /*
      * public constructor(id)
      *
      *  creates a button that can be interacted with
@@ -64,7 +72,7 @@ GAME.BUTTON = (function() {
         
         // Draw text if there is any
         if (this.text) {
-            context.fillText(this.text, this.x, this.y);
+            context.fillText(this.text, this.x, this.y + textOffsetY);
         };
 
     };
