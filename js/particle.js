@@ -14,7 +14,7 @@ GAME.PARTICLE = (function() {
         "touchsparkle": function(args) {
             
             // load image
-            this.loadImage("touchsparkle", "assets/touchsparkle.png");
+            this.loadImage("touchsparkle", "assets/images/touchsparkle.png");
             
             // random initial speeds
             this.speedX = (Math.random() * 8) - 4;
@@ -37,7 +37,7 @@ GAME.PARTICLE = (function() {
         "bonkstar": function(args) {
             
             // load image
-            this.loadImage("bonkstar", "assets/bonkstar.png");
+            this.loadImage("bonkstar", "assets/images/bonkstar.png");
             
             // size
             this.width = 16;

@@ -88,7 +88,7 @@ GAME.YACOPU = (function() {
         // Preload image if needed
         if (image === undefined) {
             image = new Image();
-            image.src = "assets/yacopu.png";
+            image.src = "assets/images/yacopu.png";
         }
         
         return this;
