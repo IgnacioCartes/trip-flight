@@ -4,5 +4,8 @@
 # zip files
 *.zip
 
+# GIMP files
+*.xcf
+
 # Tiled folder used during level creation
 _tiled/
