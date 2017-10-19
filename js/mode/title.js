@@ -39,16 +39,19 @@ GAME.MODE = (function(mode) {
         buttons.stage_select.image = new Image();
         buttons.stage_select.image.src = "assets/images/buttons/start.png";
         buttons.stage_select.text = "Start";
+        buttons.stage_select.frameOnActive = 1;
             
         buttons.records = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.records.image = new Image();
         buttons.records.image.src = "assets/images/buttons/records.png";
         buttons.records.text = "Records";
+        buttons.records.frameOnActive = 1;
             
         buttons.about = new GAME.BUTTON(320 - 96, 272, 192, 32);
         buttons.about.image = new Image();
         buttons.about.image.src = "assets/images/buttons/about.png";
         buttons.about.text = "About";
+        buttons.about.frameOnActive = 1;
         
     };
     
@@ -64,9 +67,11 @@ GAME.MODE = (function(mode) {
 
         // Update button
         buttons.stage_select.update(input);
+        buttons.records.update(input);
+        buttons.about.update(input);
             
         // React to button
-        if (buttons.stage_select.release) game.setMode("STAGE_SELECT", { level: 1 });
+        if (buttons.stage_select.release) game.setMode("STAGE_SELECT");
         
     };
     

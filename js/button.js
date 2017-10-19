@@ -13,6 +13,9 @@ GAME.BUTTON = (function() {
         this.width = width;
         this.height = height;
         
+        this.frame = 0;
+        this.frameOnActive = 0;
+        
         this.visible = true;
         this.interactivity = true;
         
@@ -53,8 +56,9 @@ GAME.BUTTON = (function() {
         
         // Draw image if one was added to the button object
         if (this.image && (typeof this.image === "object")) {
+            this.frame = (this.active ? this.frameOnActive : 0);
             if (this.image.complete) {
-                context.drawImage(this.image, this.x, this.y, this.width, this.height);
+                context.drawImage(this.image, this.frame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
             }
         }
         

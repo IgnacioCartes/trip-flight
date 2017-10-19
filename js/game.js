@@ -82,6 +82,8 @@ var GAME = (function () {
         
         console.log("setting mode " + newMode);
         
+        argsObj = argsObj || {};
+        
         if (GAME.MODE[newMode]) {
             if (argsObj.nofade) {
                 // nofade mode - set mode right away
