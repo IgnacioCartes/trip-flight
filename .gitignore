@@ -3,3 +3,6 @@
 
 # zip files
 *.zip
+
+# Tiled folder used during level creation
+_tiled/
