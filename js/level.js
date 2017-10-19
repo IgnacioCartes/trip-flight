@@ -155,7 +155,7 @@ GAME.LEVEL = (function() {
         
         // If the tiles are outside the level boundaries, return a default solid tile
         if ((tilex < 0) || (tiley < 0) || (tilex >= this.tiles.length) || (tiley >= ROWS)) {
-            return tileProperties[1];
+            return tileBaseProp.solid;
         }
         
         var tileId = this.tiles[tilex][tiley];
@@ -234,6 +234,11 @@ GAME.LEVEL = (function() {
                 for (var i = 0, l = data.level.length; i < l; i++) {
                     instance.tiles.push(data.columns[data.level[i]]);
                 };
+                
+            } else {
+                
+                // no layoutStyle -- just load level as it is
+                instance.tiles = data.level;
                 
             };
             
