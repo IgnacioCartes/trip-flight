@@ -18,6 +18,8 @@ GAME.MODE = (function(mode) {
     // Buttons
     var buttons = {};
     
+    // particles
+    var particles = [];
     
     
     /*
@@ -65,13 +67,21 @@ GAME.MODE = (function(mode) {
      */
     title.update = function(input) {
 
-        // Update button
-        buttons.stage_select.update(input);
-        buttons.records.update(input);
-        buttons.about.update(input);
+        // update particles
+        GAME.PARTICLE.updateAll(particles, game);
+        
+        // run particle generators for level if any
+        GAME.PARTICLE.runParticleGenerators(particles, game, level.particleGenerator, { scrollX: scrollX });
+        
+        // Update buttons when no fade
+        if (!game.isFade()) {
+            buttons.stage_select.update(input);
+            buttons.records.update(input);
+            buttons.about.update(input);
             
-        // React to button
-        if (buttons.stage_select.release) game.setMode("STAGE_SELECT");
+            // React to button
+            if (buttons.stage_select.release) game.setMode("STAGE_SELECT");
+        }
         
     };
     
@@ -85,11 +95,21 @@ GAME.MODE = (function(mode) {
      */
     title.render = function(context) {
         
+        // render background level
         level.render(context, 0);
-        buttons.stage_select.render(context);
-        buttons.records.render(context);
-        buttons.about.render(context);
         
+        // set font style for buttons
+        //context.fontStyle = 
+        
+        // render buttons if no fade
+        if (!game.isFade()) {
+            buttons.stage_select.render(context);
+            buttons.records.render(context);
+            buttons.about.render(context);
+        }
+        
+        // display particles
+        GAME.PARTICLE.renderAll(particles, context, scrollX);
     };
     
     

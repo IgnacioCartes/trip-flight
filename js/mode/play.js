@@ -79,10 +79,13 @@ GAME.MODE = (function(mode) {
         // update particles
         GAME.PARTICLE.updateAll(particles, game);
         
+        // run particle generators for level if any
+        GAME.PARTICLE.runParticleGenerators(particles, game, level.particleGenerator, { scrollX: scrollX });
+        
         // create random "cloud" particles for testing every 16 frames
-        if (game.getTicks() % 16 == 0) {
-            particles.push(new GAME.PARTICLE(game.width + scrollX, 2 * Math.round(Math.random() * 64 + 32), { template: "cloud" }));
-        };
+        //if (game.getTicks() % 16 == 0) {
+        //    particles.push(new GAME.PARTICLE(game.width + scrollX, 2 * Math.round(Math.random() * 64 + 32), { template: "cloud" }));
+        //};
         
         // do nothing more until actual race has started
         if (!hasRaceStarted) {
@@ -165,7 +168,7 @@ GAME.MODE = (function(mode) {
         // get race time
         var roundraceTime = Math.round((raceTime / 60) * 100) / 100;
         
-        context.fillStyle = "#3377BB";
+        context.fillStyle = "#99BBCC";
         context.fillText((roundraceTime).toString(), 512, 16);
         
         if (yacopu.goal) {

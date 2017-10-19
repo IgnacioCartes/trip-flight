@@ -8,7 +8,13 @@ GAME.PARTICLE = (function() {
     // imagebank for particles
     var images = [];
     
-    // templates
+
+    /*
+     * particle templates
+     *
+     *  these define some common particles that will be created multiple times
+     *
+     */
     var templates = {
         // touchsparkle -- created when the player taps on the screen during play mode
         "touchsparkle": function(args) {
@@ -84,6 +90,23 @@ GAME.PARTICLE = (function() {
             
             // display
             this.color = "#c0c0c0";
+        }
+    };
+    
+
+    /*
+     * generators
+     *
+     *  defines some particle generators that can be used by levels
+     *
+     */
+    var generators = {
+        "clouds": function(particles, game, args) {
+            
+            if (game.getTicks() % 16 == 0) {
+                particles.push(new GAME.PARTICLE(game.width + args.scrollX, 2 * Math.round(Math.random() * 64 + 32), { template: "cloud" }));
+            };
+            
         }
     };
     
@@ -236,7 +259,7 @@ GAME.PARTICLE = (function() {
         };
         
         // debug
-        context.fillText("particles rendered: " + particles.length.toString(), 16, 256)
+        //context.fillText("particles rendered: " + particles.length.toString(), 16, 256);
     }
     
     
@@ -259,6 +282,28 @@ GAME.PARTICLE = (function() {
                 particles.splice(i, 1);
             }
         };
+    }
+    
+    
+    
+    /*
+     * public static void .runParticleGenerators(particles, game, generatorsList)
+     *
+     *  runs particle generators from a list
+     *
+     */
+    particle.runParticleGenerators = function (particles, game, generatorsList, args) {
+        
+        // do nothing if generator list is undefined or empty
+        if (generatorsList === undefined) return null;
+        if (generatorsList.length == 0) return null;
+        
+        for (var i = 0; i < generatorsList.length; i++) {
+            if (typeof generators[generatorsList[i]] === "function") {
+                generators[generatorsList[i]](particles, game, args);
+            }
+        };
+        
     }
     
     

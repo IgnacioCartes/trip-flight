@@ -10,6 +10,9 @@
         "slope",
         "bouncy"
     ],
+    "particleGenerator": [
+        "clouds"
+    ],
     "layoutStyle": "columns",
     "columns": [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],

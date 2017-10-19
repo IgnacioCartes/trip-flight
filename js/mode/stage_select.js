@@ -12,8 +12,6 @@ GAME.MODE = (function(mode) {
     // reference to main game object
     var game;
     
-    // level layout - managed by level.js
-    var level;
     
     // Buttons
     var buttons = {};
@@ -35,7 +33,7 @@ GAME.MODE = (function(mode) {
         if (game === undefined) game = mainGameObj;
         
         // Create new level 0 ("intro" level)
-        level = new GAME.LEVEL(0);
+        //level = new GAME.LEVEL(0);
             
         // Create and position buttons
             
@@ -68,6 +66,9 @@ GAME.MODE = (function(mode) {
      */
     stage_select.update = function(input) {
 
+        // wait until no fade
+        if (game.isFade()) return null;
+        
         // Update button
         buttons.play.update(input);
         buttons.previous.update(input);
@@ -104,7 +105,10 @@ GAME.MODE = (function(mode) {
      */
     stage_select.render = function(context) {
         
-        level.render(context, 0);
+        // wait until no fade
+        if (game.isFade()) return null;
+        
+        //level.render(context, 0);
         buttons.play.render(context, "#FF0000");
         buttons.previous.render(context, "#FF0000");
         buttons.next.render(context, "#FF0000");
