@@ -2,7 +2,7 @@
     "name": "Makeshift Level 1",
     "author": "@NachoYacopu",
     "creationDate": "14-10-2017",
-    "tileset": "assets/images/level2.png",
+    "tileset": "assets/images/tilesets/level2.png",
     "tileProperties": [
         "empty",
         "solid",

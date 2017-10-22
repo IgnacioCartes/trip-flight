@@ -2,7 +2,7 @@
     "name": "Rock Castle",
     "author": "@NachoYacopu",
     "creationDate": "17-10-2017",
-    "tileset": "assets/images/rock_castle.png",
+    "tileset": "assets/images/tilesets/rock_castle.png",
     "tileProperties": [
         "empty",
         "empty",
