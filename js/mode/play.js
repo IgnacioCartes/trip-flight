@@ -149,9 +149,11 @@ GAME.MODE = (function (mode) {
                 // let game object deal with raceTime
                 if (game.reportRaceTime(raceTime, level.id)) {
 
-                    console.log("NEW RECORD!");
+                    console.log("NEW RECORD");
 
                 };
+
+
             } else {
                 // increase race time
                 raceTime++;

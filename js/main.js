@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function () {
     'use strict';
 
     /*
@@ -9,7 +9,7 @@ window.onload = function() {
      * Then the game.js module takes it from there
      *
      */
-    
+
     new GAME();
-    
+
 };
