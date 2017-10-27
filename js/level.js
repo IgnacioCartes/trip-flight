@@ -119,8 +119,10 @@ GAME.LEVEL = (function () {
              * and so on
              */
 
+            /*
             context.fillText(firstSlice.toString() + ", " + (firstSlice + 1).toString(), 0, 64);
             context.fillText(firstBuffer.toString() + ", " + secondBuffer.toString(), 0, 80);
+            */
         } else {
             this.loadWait++;
         };
@@ -144,8 +146,10 @@ GAME.LEVEL = (function () {
             context.fillRect(goalPosition - 1, 0, 2, 352);
         }
 
+        /*
         context.fillStyle = "#889988";
         context.fillText(scrollX.toString(), 0, 112);
+        */
     };
 
 

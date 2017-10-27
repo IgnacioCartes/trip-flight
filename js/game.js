@@ -196,7 +196,7 @@ var GAME = (function () {
         GAME.MODE[mode].render(context);
 
         // Display screen resolution
-        context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
+        //context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
 
     }
 

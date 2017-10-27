@@ -129,16 +129,19 @@ GAME.YACOPU = (function () {
         context.drawImage(image, animPos, 0, 32, 32, thisx, thisy, 32, 32);
 
         // debug
+        /*
         context.fillStyle = "#543210";
         context.fillText("speed: " + this.speedX.toString() + ", " + this.speedY.toString(), 0, 16);
         context.fillText("position: " + this.x.toString() + ", " + this.y.toString(), 0, 32);
         context.fillText("onGround: " + this.lastOnGround.toString(), 0, 192);
+        */
 
-        // speed
+        // speed meter
         if (this.speedX > 0) {
             context.fillStyle = "#A03010";
             context.fillRect(0, 352, Math.floor(this.speedX * 8), 359);
         }
+        
 
 
     };
