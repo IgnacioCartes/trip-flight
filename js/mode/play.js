@@ -91,10 +91,8 @@ GAME.MODE = (function (mode) {
         });
 
         // update timeleft on level when it has been loaded (from seconds to frames)
-        if ((timeLeft === null) && (level.initialTime)) {
+        if ((timeLeft === null) && (level.initialTime))
             timeLeft = level.initialTime * 60;
-            console.log(timeLeft);
-        }
 
         // do nothing more until actual race has started
         if (!hasRaceStarted) {
@@ -206,15 +204,22 @@ GAME.MODE = (function (mode) {
         // display particles
         GAME.PARTICLE.renderAll(particles, context, scrollX);
 
+        // text shadows
+        context.fillStyle = "#FFFFFF";
+        context.fillText((raceTime / 60).toFixed(2), 514, 18);
+        context.fillText((timeLeft / 60).toFixed(2), 514, 34);
+        
         context.fillStyle = "#99BBCC";
         context.fillText((raceTime / 60).toFixed(2), 512, 16);
         context.fillStyle = "#AA4455";
         context.fillText((timeLeft / 60).toFixed(2), 512, 32);
 
+        /*
         if (yacopu.goal) {
             context.fillText("max speed: " + yacopu.maxSpeed.toString(), 32, 208);
             context.fillText("bonks: " + yacopu.bonks.toString(), 32, 224);
         }
+        */
 
     };
 

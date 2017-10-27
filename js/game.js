@@ -268,8 +268,6 @@ var GAME = (function () {
     game.prototype.reportRaceTime = function (raceTime, level) {
 
         var saveLevelId = level - 1;
-
-        console.log(raceTime, saveLevelId);
         // compare racetime with record
         if (raceTime < this.save.bestTimes[saveLevelId].time) {
             // new record!
