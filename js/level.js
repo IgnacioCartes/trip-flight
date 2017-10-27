@@ -124,13 +124,25 @@ GAME.LEVEL = (function () {
         } else {
             this.loadWait++;
         };
+        
+        context.fillStyle = "#8899CC";
+        
+        // Draw checkpoints if they exist and are visible
+        if (this.checkpoints) {
+            for (var i = 0; i < this.checkpoints.length; i++) {
+                //console.log("checkpoint line visible " + (this.checkpoints[i].distance).toString());
+                var linePosition = (this.checkpoints[i].distance * 32) - scrollX + 31;
+                if ((linePosition > 0) && (linePosition < 640)) {
+                    context.fillRect(linePosition - 1, 0, 2, 352);
+                }
+            }
+        }
 
-        // Determine whether or not to render the goal line
+        // Draw goal if visible on screen
         var goalPosition = (this.goal * 32) - scrollX + 31;
         if ((goalPosition > 0) && (goalPosition < 640)) {
             context.fillRect(goalPosition - 1, 0, 2, 352);
         }
-
 
         context.fillStyle = "#889988";
         context.fillText(scrollX.toString(), 0, 112);
@@ -211,8 +223,10 @@ GAME.LEVEL = (function () {
             image = new Image();
             image.src = data.tileset;
 
-            // goal
+            // goal and checkpoints
             instance.goal = data.goal;
+            instance.checkpoints = data.checkpoints;
+            instance.initialTime = data.initialTime;
 
             // particle generator
             instance.particleGenerator = data.particleGenerator;

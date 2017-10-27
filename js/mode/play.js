@@ -22,7 +22,7 @@ GAME.MODE = (function (mode) {
     var scrollX = 0;
 
     // time-related variables
-    var raceTime, countdownTime, initialTimeStamp;
+    var raceTime, countdownTime, initialTimeStamp, timeLeft;
     var hasRaceStarted = false,
         hasRaceEnded = false;
 
@@ -64,6 +64,7 @@ GAME.MODE = (function (mode) {
         countdownTime = (60 * 4) - 1;
         initialTimeStamp = game.getTicks();
         hasRaceStarted = false;
+        timeLeft = null;
         flapHistory = [];
     };
 
@@ -85,6 +86,11 @@ GAME.MODE = (function (mode) {
             scrollX: scrollX
         });
 
+        if ((timeLeft === null) && (level.initialTime)) {
+            timeLeft = level.initialTime;
+            console.log(timeLeft);
+        }
+
         // do nothing more until actual race has started
         if (!hasRaceStarted) {
             // count every 60 frames
@@ -100,7 +106,6 @@ GAME.MODE = (function (mode) {
 
         // update yacopu movement
         yacopu.update(game);
-
 
         // flap if a touch occured on this frame
         if (input.touch.click) {
@@ -148,15 +153,13 @@ GAME.MODE = (function (mode) {
                 hasRaceEnded = true;
                 // let game object deal with raceTime
                 if (game.reportRaceTime(raceTime, level.id)) {
-
                     console.log("NEW RECORD");
-
-                };
-
+                }
 
             } else {
-                // increase race time
+                // increase race time and decrease remaining time
                 raceTime++;
+                if (timeLeft > 0) timeLeft--;
             }
         }
 
@@ -188,6 +191,8 @@ GAME.MODE = (function (mode) {
 
         context.fillStyle = "#99BBCC";
         context.fillText((raceTime / 60).toFixed(2), 512, 16);
+        context.fillStyle = "#AA4455";
+        context.fillText((timeLeft / 60).toFixed(2), 512, 32);
 
         if (yacopu.goal) {
             context.fillText("max speed: " + yacopu.maxSpeed.toString(), 32, 208);
