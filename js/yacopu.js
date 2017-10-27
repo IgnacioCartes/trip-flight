@@ -75,6 +75,9 @@ GAME.YACOPU = (function () {
         this.bonks = 0;
         this.isBonking = false;
 
+        this.isCrossingCheckpoint = false;
+        this.nextCheckpoint = 0;
+
         this.animation = {
             name: "",
             step: 0,
@@ -280,6 +283,21 @@ GAME.YACOPU = (function () {
                 this.goal = true;
             };
         };
+
+        // Check when checkpoints are being crossed (if they exist)
+        if (this.level.checkpoints) {
+            // by default isCrossingCheckpoint is always false...unless...
+            this.isCrossingCheckpoint = false;
+            // check if there are checkpoints left
+            if (this.nextCheckpoint < this.level.checkpoints.length) {
+                // check if we are crossing a checkpoint
+                if (this.x >= (this.level.checkpoints[this.nextCheckpoint].distance * 32)) {
+                    // set next checkpoint and flag for main game to check
+                    this.nextCheckpoint++;
+                    this.isCrossingCheckpoint = true;
+                }
+            }
+        }
 
         // Determine proper animation
         if (tileUnder.solid || tileUnder.slope) {

@@ -21,19 +21,22 @@ GAME.MODE = (function (mode) {
     // horizontal scrolling
     var scrollX = 0;
 
-    // time-related variables
-    var raceTime, countdownTime, initialTimeStamp, timeLeft;
-    var hasRaceStarted = false,
-        hasRaceEnded = false;
-
-    // flap history
-    var flapHistory = [];
-
     // collection of particles
     var particles = [];
 
     // buttons
     var buttons = [];
+    
+    // time-related variables
+    var raceTime, countdownTime, initialTimeStamp, timeLeft;
+    var hasRaceStarted = false,
+        hasRaceEnded = false;
+    
+    // race variables
+    var raceFailed = false;
+
+    // flap history
+    var flapHistory = [];
 
 
 
@@ -66,6 +69,7 @@ GAME.MODE = (function (mode) {
         hasRaceStarted = false;
         timeLeft = null;
         flapHistory = [];
+        raceFailed = false;
     };
 
 
@@ -86,8 +90,9 @@ GAME.MODE = (function (mode) {
             scrollX: scrollX
         });
 
+        // update timeleft on level when it has been loaded (from seconds to frames)
         if ((timeLeft === null) && (level.initialTime)) {
-            timeLeft = level.initialTime;
+            timeLeft = level.initialTime * 60;
             console.log(timeLeft);
         }
 
@@ -159,7 +164,19 @@ GAME.MODE = (function (mode) {
             } else {
                 // increase race time and decrease remaining time
                 raceTime++;
-                if (timeLeft > 0) timeLeft--;
+                if (timeLeft > 0)  {
+                    timeLeft--;
+                    if (timeLeft === 0) {
+                        // if timeleft is over, should be considered as a failure to complete level
+                        console.log("level failed :(");
+                        raceFailed = true;
+                    }
+                }
+            }
+            
+            // check for checkpoints
+            if (yacopu.isCrossingCheckpoint) {
+                timeLeft += level.checkpoints[yacopu.nextCheckpoint - 1].bonusTime * 60;
             }
         }
 
