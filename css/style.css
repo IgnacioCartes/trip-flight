@@ -6,8 +6,3 @@
 html, body {
     overflow: hidden;
 }
-
-@font-face {
-    font-family: "EarlyGameBoy";
-    src: url("../assets/fonts/Early GameBoy.ttf");
-}
