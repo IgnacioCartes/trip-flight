@@ -110,8 +110,8 @@ GAME.MODE = (function (mode) {
         // update yacopu movement
         yacopu.update(game);
 
-        // flap if a touch occured on this frame
-        if (input.touch.click) {
+        // flap if a touch occured on this frame and race is still going 
+        if (input.touch.click && !hasRaceEnded) {
             yacopu.flap(game);
 
             // track "flap history"
@@ -167,6 +167,7 @@ GAME.MODE = (function (mode) {
                     if (timeLeft === 0) {
                         // if timeleft is over, should be considered as a failure to complete level
                         console.log("level failed :(");
+                        hasRaceEnded = true;
                         raceFailed = true;
                     }
                 }
@@ -205,13 +206,15 @@ GAME.MODE = (function (mode) {
         GAME.PARTICLE.renderAll(particles, context, scrollX);
 
         // text shadows
-        context.fillStyle = "#FFFFFF";
+        context.fillStyle = "#000000";
+        context.fillText((raceTime / 60).toFixed(2), 510, 14);
+        context.fillText((timeLeft / 60).toFixed(2), 510, 30);
         context.fillText((raceTime / 60).toFixed(2), 514, 18);
         context.fillText((timeLeft / 60).toFixed(2), 514, 34);
         
-        context.fillStyle = "#99BBCC";
+        context.fillStyle = "#CBCCCE";
         context.fillText((raceTime / 60).toFixed(2), 512, 16);
-        context.fillStyle = "#AA4455";
+        context.fillStyle = "#BFB0B3";
         context.fillText((timeLeft / 60).toFixed(2), 512, 32);
 
         /*

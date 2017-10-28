@@ -340,8 +340,6 @@ GAME.YACOPU = (function () {
      */
     yacopu.prototype.flap = function (game) {
 
-        // If the goal has been reached already, ignore
-        if (this.goal) return null;
 
         // If standing on ground, give uncapped X acceleration
         if (this.thisFrameOnGround) {
