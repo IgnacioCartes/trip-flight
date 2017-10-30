@@ -26,12 +26,13 @@ GAME.MODE = (function (mode) {
 
     // buttons
     var buttons = [];
-    
+
     // time-related variables
     var raceTime, countdownTime, initialTimeStamp, timeLeft;
     var hasRaceStarted = false,
         hasRaceEnded = false;
-    
+    var timeBonus;
+
     // race variables
     var raceFailed = false;
 
@@ -68,6 +69,7 @@ GAME.MODE = (function (mode) {
         initialTimeStamp = game.getTicks();
         hasRaceStarted = false;
         timeLeft = null;
+        timeBonus = 0;
         flapHistory = [];
         raceFailed = false;
     };
@@ -162,20 +164,30 @@ GAME.MODE = (function (mode) {
             } else {
                 // increase race time and decrease remaining time
                 raceTime++;
-                if (timeLeft > 0)  {
+                if (timeLeft > 0) {
                     timeLeft--;
+
+                    // if timeleft is over, should be considered as a failure to complete level
                     if (timeLeft === 0) {
-                        // if timeleft is over, should be considered as a failure to complete level
                         console.log("level failed :(");
                         hasRaceEnded = true;
                         raceFailed = true;
                     }
+
+                    // tick in bonusTime add
+                    if (timeBonus) {
+                        // add a sixth of a second every frame
+                        timeLeft += 10;
+                        timeBonus--;
+                    }
+
                 }
             }
-            
+
             // check for checkpoints
             if (yacopu.isCrossingCheckpoint) {
-                timeLeft += level.checkpoints[yacopu.nextCheckpoint - 1].bonusTime * 60;
+                // if one is crossed, add the bonusTime to timeLeft in 1/6th of a sec intervals
+                timeBonus += level.checkpoints[yacopu.nextCheckpoint - 1].bonusTime * 6;
             }
         }
 
@@ -206,25 +218,17 @@ GAME.MODE = (function (mode) {
         GAME.PARTICLE.renderAll(particles, context, scrollX);
 
         // add text
-        game.pushTextToRender({
+        GAME.TEXT.pushTextToRender({
             text: (raceTime / 60).toFixed(2),
             x: 512,
             y: 32
         });
-        
-        game.pushTextToRender({
+
+        GAME.TEXT.pushTextToRender({
             text: "-" + (timeLeft / 60).toFixed(2),
             x: 512 - 16,
             y: 48
         });
-        
-
-        /*
-        if (yacopu.goal) {
-            context.fillText("max speed: " + yacopu.maxSpeed.toString(), 32, 208);
-            context.fillText("bonks: " + yacopu.bonks.toString(), 32, 224);
-        }
-        */
 
     };
 

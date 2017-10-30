@@ -72,6 +72,11 @@ GAME.BUTTON = (function () {
 
         // Draw text if there is any
         if (this.text) {
+            GAME.TEXT.pushTextToRender({
+                text: this.text,
+                x: this.x,
+                y: this.y + textOffsetY
+            });
             context.fillText(this.text, this.x, this.y + textOffsetY);
         };
 
