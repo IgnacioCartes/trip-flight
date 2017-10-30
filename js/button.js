@@ -33,6 +33,7 @@ GAME.BUTTON = (function () {
         this.image = null;
 
         this.text = null;
+        this.centeredText = true;
     };
 
 
@@ -52,6 +53,7 @@ GAME.BUTTON = (function () {
         // Draw box if a strokestyle was provided
         if (strokeStyle) {
             var storeStrokeStyle = context.strokeStyle;
+            context.lineWidth = 2;
             context.strokeStyle = strokeStyle;
             // draw full box if active
             if (this.active)
@@ -72,12 +74,25 @@ GAME.BUTTON = (function () {
 
         // Draw text if there is any
         if (this.text) {
-            GAME.TEXT.pushTextToRender({
-                text: this.text,
-                x: this.x,
-                y: this.y + textOffsetY
-            });
-            context.fillText(this.text, this.x, this.y + textOffsetY);
+
+            // add shift if active
+            var activeOffset = (this.active ? 2 : 0);
+
+            // center text
+            if (this.centeredText) {
+                var len = this.text.length;
+                GAME.TEXT.pushTextToRender({
+                    text: this.text,
+                    x: this.x + ((this.width - (len * 16)) / 2) + 8 + activeOffset,
+                    y: this.y + textOffsetY + ((this.height - 16) / 2) + activeOffset
+                });
+            } else {
+                GAME.TEXT.pushTextToRender({
+                    text: this.text,
+                    x: this.x + activeOffset,
+                    y: this.y + textOffsetY + activeOffset
+                });
+            }
         };
 
     };
