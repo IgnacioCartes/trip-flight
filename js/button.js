@@ -52,16 +52,16 @@ GAME.BUTTON = (function () {
 
         // Draw box if a strokestyle was provided
         if (strokeStyle) {
-            var storeStrokeStyle = context.strokeStyle;
             context.lineWidth = 2;
             context.strokeStyle = strokeStyle;
             // draw full box if active
-            if (this.active)
+            if (this.active) {
+                context.fillStyle = this.activeStyle || "#C0C0C0";
                 context.fillRect(this.x, this.y, this.width, this.height);
+            }
 
             context.strokeRect(this.x, this.y, this.width, this.height);
 
-            context.strokeStyle = storeStrokeStyle;
         }
 
         // Draw image if one was added to the button object
