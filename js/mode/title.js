@@ -100,9 +100,6 @@ GAME.MODE = (function (mode) {
         // render background level
         level.render(context, 0);
 
-        // set font style for buttons
-        //context.fontStyle = 
-
         // render buttons if no fade
         if (!game.isFade()) {
             buttons.stage_select.render(context);

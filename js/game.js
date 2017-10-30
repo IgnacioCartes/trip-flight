@@ -28,6 +28,9 @@ var GAME = (function () {
     // key used to access local storage
     var localStorageKey = "com.trip-flight";
 
+    // text display storage
+    var text = [];
+
 
 
     /*
@@ -188,15 +191,66 @@ var GAME = (function () {
         // set alpha depending on fade status
         context.globalAlpha = fade.step / 4;
 
-        // set default color and font
-        context.fillStyle = "#000000";
-        context.font = "16px EarlyGameboy";
-
         // call render method depending on mode
         GAME.MODE[mode].render(context);
 
+        // Render text
+        renderText(context);
+
         // Display screen resolution
         //context.fillText(window.innerWidth.toString() + ", " + window.innerHeight.toString(), 64, 64);
+
+    }
+
+
+
+    /*
+     * public void pushTextToRender (textObject)
+     *
+     *  adds a text to the array to be rendered
+     *
+     */
+    game.prototype.pushTextToRender = function (textObject) {
+        text.push(textObject);
+    }
+
+
+
+
+    /*
+     * private void renderText(context)
+     *
+     *  renders all text passed to the this.text array every frame
+     *
+     */
+    function renderText(context) {
+
+        // do nothing if there is no text
+        if (!text) return null;
+        var len = text.length;
+        if (len === 0) return null;
+
+
+        // Set Font
+        context.font = "16px EarlyGameboy";
+
+        // Outline properties
+        context.strokeStyle = "#000000";
+        context.lineWidth = 4;
+
+        // Render outlines first
+        for (var i = 0; i < len; i++)
+            context.strokeText(text[i].text, text[i].x, text[i].y);
+
+        // Text properties
+        context.fillStyle = "#FFFFFF";
+
+        // Render text on top of outline
+        for (var i = 0; i < len; i++)
+            context.fillText(text[i].text, text[i].x, text[i].y);
+
+        // Clean array
+        text = [];
 
     }
 

@@ -205,17 +205,18 @@ GAME.MODE = (function (mode) {
         // display particles
         GAME.PARTICLE.renderAll(particles, context, scrollX);
 
-        // text shadows
-        context.strokeStyle = "#000000";
-        context.lineWidth = 4;
-        context.strokeText((raceTime / 60).toFixed(2), 512, 16);
-        context.strokeText((timeLeft / 60).toFixed(2), 512, 32);
+        // add text
+        game.pushTextToRender({
+            text: (raceTime / 60).toFixed(2),
+            x: 512,
+            y: 32
+        });
         
-        // show text
-        context.fillStyle = "#CBCCCE";
-        context.fillText((raceTime / 60).toFixed(2), 512, 16);
-        context.fillStyle = "#BFB0B3";
-        context.fillText((timeLeft / 60).toFixed(2), 512, 32);
+        game.pushTextToRender({
+            text: "-" + (timeLeft / 60).toFixed(2),
+            x: 512 - 16,
+            y: 48
+        });
         
 
         /*
