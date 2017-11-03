@@ -19,7 +19,7 @@ GAME.MODE = (function (mode) {
     var level;
 
     // horizontal scrolling
-    var scrollX = 0;
+    var scrollX;
 
     // collection of particles
     var particles = [];
@@ -64,6 +64,8 @@ GAME.MODE = (function (mode) {
         buttons.restart.image = new Image();
 
         // Initialize game variables
+        scrollX = 0;
+        
         raceTime = 0;
         countdownTime = (60 * 4) - 1;
         initialTimeStamp = game.getTicks();
@@ -195,6 +197,9 @@ GAME.MODE = (function (mode) {
         buttons.restart.update(input);
         if (buttons.restart.release) {
             console.log("this is the restart level button");
+            game.setMode("PLAY", {
+                level: level.id
+            });
         }
     };
 
