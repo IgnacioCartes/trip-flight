@@ -6,7 +6,7 @@ GAME.BUTTON = (function () {
      */
 
     // text offsets
-    var textOffsetY = 16;
+    var textOffsetY = 0;
 
 
     /*

@@ -51,6 +51,8 @@ GAME.TEXT = (function () {
         // Outline properties
         context.strokeStyle = "#000000";
         context.lineWidth = 4;
+        context.textBaseline = "top";
+        
 
         // Render outlines first
         for (var i = 0; i < len; i++)
