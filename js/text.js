@@ -5,12 +5,17 @@ GAME.TEXT = (function () {
      * Global variables and constants
      */
 
-    // font image
+    // font banks
+    var fontBank = {};
+
     var image = new Image();
     image.src = "assets/fonts/eGB.png";
 
     // bank for texts
     var textBank = [];
+
+    // default font
+    var defaultFontId = "";
 
 
 
@@ -21,6 +26,29 @@ GAME.TEXT = (function () {
      *
      */
     var text = function () {};
+
+
+
+    /*
+     * public static void .registerFont(fontId, bitmapPath, properties)
+     *
+     *  defines a new bitmap font to be used
+     *
+     */
+    text.registerFont = function (fontId, bitmapPath, properties) {
+
+        // push properties to new font object
+        var newFontObject = properties || {};
+        newFontObject.image = new Image();
+        newFontObject.image.src = bitmapPath;
+
+        // push to fontbank
+        fontBank[fontId] = newFontObject;
+
+        // set as default if specified
+        if (properties.setAsDefault) defaultFontId = fontId;
+
+    }
 
 
 
@@ -75,12 +103,25 @@ GAME.TEXT = (function () {
         // iterate through all characters in a string
         var len = textToRender.length;
 
+        // get bitmap font
+        var font = (textObject.font ? fontBank[textObject.font] : fontBank[defaultFontId]);
+
         for (var i = 0; i < len; i++) {
             // ignore characters not contained in imageFont
             var char = textToRender.charCodeAt(i);
-            if ((char >= 32) && (char <= 95)) {
+            if ((char >= font.firstCharCode) && (char <= font.lastCharCode)) {
                 // render character
-                context.drawImage(image, (char - 32) * 16, 0, 16, 32, textObject.x + (i * 16), textObject.y, 16, 32);
+                context.drawImage(
+                    font.image,
+                    (char - font.firstCharCode) * font.characterWidth,
+                    0,
+                    font.characterWidth,
+                    font.characterHeight,
+                    textObject.x + (i * font.characterWidth),
+                    textObject.y,
+                    font.characterWidth,
+                    font.characterHeight
+                );
             }
         }
     }

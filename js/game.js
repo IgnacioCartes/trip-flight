@@ -55,6 +55,15 @@ var GAME = (function () {
         // Set update and render methods
         display.setUpdate(updateWrapper)
             .setRender(renderWrapper);
+        
+        // Register bitmap font
+        GAME.TEXT.registerFont("eGB", "assets/fonts/eGB.png", {
+            characterWidth: 16,
+            characterHeight: 32,
+            firstCharCode: 32,
+            lastCharCode: 95,
+            setAsDefault: true
+        });
 
         // Set initial mode
         this.setMode("TITLE", {
