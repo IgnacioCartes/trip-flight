@@ -5,6 +5,10 @@ GAME.TEXT = (function () {
      * Global variables and constants
      */
 
+    // font image
+    var image = new Image();
+    image.src = "assets/fonts/eGB.png";
+
     // bank for texts
     var textBank = [];
 
@@ -33,7 +37,7 @@ GAME.TEXT = (function () {
 
 
     /*
-     * public static void .renderall(context)
+     * public static void .renderAll(context)
      *
      *  renders all particles in an array to a given context
      *
@@ -45,29 +49,40 @@ GAME.TEXT = (function () {
         var len = textBank.length;
         if (len === 0) return null;
 
-        // Set Font
-        context.font = "16px EarlyGameboy";
-
-        // Outline properties
-        context.strokeStyle = "#000000";
-        context.lineWidth = 4;
-        context.textBaseline = "top";
-        
-
-        // Render outlines first
-        for (var i = 0; i < len; i++)
-            context.strokeText(textBank[i].text, textBank[i].x, textBank[i].y);
-
-        // Text properties
-        context.fillStyle = "#FFFFFF";
-
-        // Render text on top of outline
-        for (var i = 0; i < len; i++)
-            context.fillText(textBank[i].text, textBank[i].x, textBank[i].y);
+        // render each text from array
+        for (var i = 0; i < len; i++) {
+            render(textBank[i], context);
+        }
 
         // Clean array
         textBank = [];
 
+    }
+
+
+
+    /*
+     * private static void .render(textObject, context)
+     *
+     *  renders one single text object to a given context
+     *
+     */
+    function render(textObject, context) {
+
+        // uppercase and trim text
+        var textToRender = textObject.text.toUpperCase().trim();
+
+        // iterate through all characters in a string
+        var len = textToRender.length;
+
+        for (var i = 0; i < len; i++) {
+            // ignore characters not contained in imageFont
+            var char = textToRender.charCodeAt(i);
+            if ((char >= 32) && (char <= 95)) {
+                // render character
+                context.drawImage(image, (char - 32) * 16, 0, 16, 32, textObject.x + (i * 16), textObject.y, 16, 32);
+            }
+        }
     }
 
 
