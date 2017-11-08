@@ -141,7 +141,7 @@ GAME.YACOPU = (function () {
             context.fillStyle = "#A03010";
             context.fillRect(0, 352, Math.floor(this.speedX * 8), 359);
         }
-        
+
 
 
     };

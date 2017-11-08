@@ -126,9 +126,9 @@ GAME.LEVEL = (function () {
         } else {
             this.loadWait++;
         };
-        
+
         context.fillStyle = "#8899CC";
-        
+
         // Draw checkpoints if they exist and are visible
         if (this.checkpoints) {
             for (var i = 0; i < this.checkpoints.length; i++) {

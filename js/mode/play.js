@@ -29,12 +29,11 @@ GAME.MODE = (function (mode) {
 
     // time-related variables
     var raceTime, countdownTime, initialTimeStamp, timeLeft;
-    var hasRaceStarted = false,
-        hasRaceEnded = false;
+    var hasRaceStarted, hasRaceEnded;
     var timeBonus;
 
     // race variables
-    var raceFailed = false;
+    var raceFailed;
 
     // flap history
     var flapHistory = [];
@@ -65,11 +64,12 @@ GAME.MODE = (function (mode) {
 
         // Initialize game variables
         scrollX = 0;
-        
+
         raceTime = 0;
         countdownTime = (60 * 4) - 1;
         initialTimeStamp = game.getTicks();
         hasRaceStarted = false;
+        hasRaceEnded = false;
         timeLeft = null;
         timeBonus = 0;
         flapHistory = [];

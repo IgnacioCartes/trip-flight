@@ -45,7 +45,7 @@ GAME.TEXT = (function () {
 
         // set as default if specified
         if (properties.setAsDefault) defaultFontId = fontId;
-        
+
         // increase fontcount
         fontCount++;
 
@@ -77,7 +77,7 @@ GAME.TEXT = (function () {
         if (!textBank) return null;
         var len = textBank.length;
         if (len === 0) return null;
-        
+
         // do nothing if no font has been loaded
         if (fontCount === 0) return null;
 
