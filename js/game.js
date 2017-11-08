@@ -55,7 +55,7 @@ var GAME = (function () {
         // Set update and render methods
         display.setUpdate(updateWrapper)
             .setRender(renderWrapper);
-        
+
         // Register bitmap font
         GAME.TEXT.registerFont("eGB", "assets/fonts/eGB.png", {
             characterWidth: 16,
@@ -80,7 +80,6 @@ var GAME = (function () {
         fade.active = true;
         fade.direction = 1;
         fade.step = 0;
-
 
     };
 

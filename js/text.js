@@ -7,9 +7,7 @@ GAME.TEXT = (function () {
 
     // font banks
     var fontBank = {};
-
-    var image = new Image();
-    image.src = "assets/fonts/eGB.png";
+    var fontCount = 0;
 
     // bank for texts
     var textBank = [];
@@ -37,7 +35,7 @@ GAME.TEXT = (function () {
      */
     text.registerFont = function (fontId, bitmapPath, properties) {
 
-        // push properties to new font object
+        // push properties and load image to new font object
         var newFontObject = properties || {};
         newFontObject.image = new Image();
         newFontObject.image.src = bitmapPath;
@@ -47,6 +45,9 @@ GAME.TEXT = (function () {
 
         // set as default if specified
         if (properties.setAsDefault) defaultFontId = fontId;
+        
+        // increase fontcount
+        fontCount++;
 
     }
 
@@ -76,6 +77,9 @@ GAME.TEXT = (function () {
         if (!textBank) return null;
         var len = textBank.length;
         if (len === 0) return null;
+        
+        // do nothing if no font has been loaded
+        if (fontCount === 0) return null;
 
         // render each text from array
         for (var i = 0; i < len; i++) {
@@ -106,6 +110,7 @@ GAME.TEXT = (function () {
         // get bitmap font
         var font = (textObject.font ? fontBank[textObject.font] : fontBank[defaultFontId]);
 
+        // loop through characters
         for (var i = 0; i < len; i++) {
             // ignore characters not contained in imageFont
             var char = textToRender.charCodeAt(i);
