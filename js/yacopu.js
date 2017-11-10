@@ -17,19 +17,19 @@ GAME.YACOPU = (function () {
         "ascending": [
             {
                 "frame": 1,
-                "duration": 6
+                "duration": 4
             },
             {
                 "frame": 2,
-                "duration": 6
+                "duration": 4
             },
             {
                 "frame": 3,
-                "duration": 6
+                "duration": 4
             },
             {
                 "frame": 4,
-                "duration": 6
+                "duration": 4
             }
         ],
         "descending": [
@@ -126,7 +126,7 @@ GAME.YACOPU = (function () {
 
         // Draw yacopu
         var animPos = this.animation.frame * 32;
-        context.drawImage(image, animPos, 0, 32, 32, thisx, thisy, 32, 32);
+        context.drawImage(image, animPos, 32, 32, 32, thisx, thisy, 32, 32);
 
         // debug
         /*
