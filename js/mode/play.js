@@ -59,7 +59,7 @@ GAME.MODE = (function (mode) {
         yacopu.level = level;
 
         // initialize buttons
-        buttons.restart = new GAME.BUTTON(640 - 32 - 16, 16, 32, 32);
+        buttons.restart = new GAME.BUTTON(592, 16, 32, 32);
         buttons.restart.image = new Image();
 
         // Initialize game variables
@@ -100,10 +100,6 @@ GAME.MODE = (function (mode) {
 
         // do nothing more until actual race has started
         if (!hasRaceStarted) {
-            // count every 60 frames
-            if ((countdownTime % 60) === 0)
-                console.log(countdownTime / 60);
-
             // when countdown hits 0, start race
             if (countdownTime-- <= 0)
                 hasRaceStarted = true;
@@ -223,17 +219,40 @@ GAME.MODE = (function (mode) {
         GAME.PARTICLE.renderAll(particles, context, scrollX);
 
         // add text
+        // race time
         GAME.TEXT.pushTextToRender({
             text: (raceTime / 60).toFixed(2),
             x: 512,
             y: 32
         });
 
-        GAME.TEXT.pushTextToRender({
-            text: "-" + (timeLeft / 60).toFixed(2),
-            x: 512 - 16,
-            y: 48
-        });
+        // remaining time if this us under 5 secs
+        if (timeLeft <= 300) {
+            GAME.TEXT.pushTextToRender({
+                text: "-" + (timeLeft / 60).toFixed(2),
+                x: 512 - 16,
+                y: 48
+            });
+        }
+
+        // show initial countdown on screen if needed
+        if (!hasRaceStarted) {
+            if (countdownTime < 180) {
+                GAME.TEXT.pushTextToRender({
+                    text: Math.floor((countdownTime / 60) + 1).toString(),
+                    x: 304,
+                    y: 160
+                });
+            }
+        } else {
+            if (raceTime < 60) {
+                GAME.TEXT.pushTextToRender({
+                    text: "GO!",
+                    x: 296,
+                    y: 160
+                });
+            }
+        }
 
     };
 
