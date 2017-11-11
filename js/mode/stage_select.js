@@ -12,11 +12,14 @@ GAME.MODE = (function (mode) {
     // reference to main game object
     var game;
 
-
     // Buttons
     var buttons = {};
 
-    // currently selected level
+    // level preview info
+    var levelPreview = [
+        "COMFY MTN.",
+        "ROCK CASTLE"
+    ];
     var selectedLevel = 1;
 
 
@@ -39,7 +42,7 @@ GAME.MODE = (function (mode) {
 
         buttons.play = new GAME.BUTTON(320 - 96, 224, 192, 32);
         buttons.play.image = new Image();
-        buttons.play.text = "Level " + selectedLevel.toString();
+        buttons.play.text = levelPreview[selectedLevel - 1];
 
         buttons.previous = new GAME.BUTTON(320 - 96 - 96, 224 - 16, 64, 64);
         buttons.previous.image = new Image();
@@ -87,12 +90,12 @@ GAME.MODE = (function (mode) {
         if (buttons.previous.release) {
             selectedLevel--;
             if (selectedLevel === 0) selectedLevel = game.save.levelsUnlocked;
-            buttons.play.text = "Level " + selectedLevel.toString();
+            buttons.play.text = levelPreview[selectedLevel - 1];
         };
         if (buttons.next.release) {
             selectedLevel++;
             if (selectedLevel > game.save.levelsUnlocked) selectedLevel = 1;
-            buttons.play.text = "Level " + selectedLevel.toString();
+            buttons.play.text = levelPreview[selectedLevel - 1];
         }
 
     };
@@ -111,10 +114,10 @@ GAME.MODE = (function (mode) {
         if (game.isFade()) return null;
 
         //level.render(context, 0);
-        buttons.play.render(context, "#FF0000");
-        buttons.previous.render(context, "#FF0000");
-        buttons.next.render(context, "#FF0000");
-        buttons.title.render(context, "#FF0000");
+        buttons.play.render(context);
+        buttons.previous.render(context);
+        buttons.next.render(context);
+        buttons.title.render(context);
 
     };
 

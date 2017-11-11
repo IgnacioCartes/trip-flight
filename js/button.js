@@ -83,7 +83,7 @@ GAME.BUTTON = (function () {
                 var len = this.text.length;
                 GAME.TEXT.pushTextToRender({
                     text: this.text,
-                    x: this.x + ((this.width - (len * 16)) / 2) + 8 + activeOffset,
+                    x: this.x + ((this.width - (len * 16)) / 2) + activeOffset,
                     y: this.y + textOffsetY + ((this.height - 16) / 2) + activeOffset
                 });
             } else {
