@@ -213,7 +213,7 @@ GAME.MODE = (function (mode) {
         yacopu.render(context, scrollX);
 
         // display button
-        buttons.restart.render(context, "#FF0000");
+        buttons.restart.render(context, "#C0C0C0");
 
         // display particles
         GAME.PARTICLE.renderAll(particles, context, scrollX);

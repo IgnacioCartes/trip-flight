@@ -102,9 +102,9 @@ GAME.MODE = (function (mode) {
 
         // render buttons if no fade
         if (!game.isFade()) {
-            buttons.stage_select.render(context);
-            buttons.records.render(context);
-            buttons.about.render(context);
+            buttons.stage_select.render(context, "#C0C0C0");
+            buttons.records.render(context, "#C0C0C0");
+            buttons.about.render(context, "#C0C0C0");
         }
 
         // display particles

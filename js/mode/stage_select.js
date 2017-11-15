@@ -114,10 +114,10 @@ GAME.MODE = (function (mode) {
         if (game.isFade()) return null;
 
         //level.render(context, 0);
-        buttons.play.render(context, "#ff0000");
-        buttons.previous.render(context, "#ff0000");
-        buttons.next.render(context, "#ff0000");
-        buttons.title.render(context, "#ff0000");
+        buttons.play.render(context, "#C0C0C0");
+        buttons.previous.render(context, "#C0C0C0");
+        buttons.next.render(context, "#C0C0C0");
+        buttons.title.render(context, "#C0C0C0");
 
     };
 

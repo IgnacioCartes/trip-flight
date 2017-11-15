@@ -56,8 +56,8 @@ GAME.BUTTON = (function () {
             context.strokeStyle = strokeStyle;
             // draw full box if active
             if (this.active) {
-                context.fillStyle = this.activeStyle || "#C0C0C0";
-                context.fillRect(this.x, this.y, this.width, this.height);
+                context.fillStyle = this.activeStyle || "#808080";
+                context.fillRect(this.x - 1, this.y - 1, this.width + 1, this.height + 1);
             }
 
             context.strokeRect(this.x, this.y, this.width, this.height);
