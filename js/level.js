@@ -53,6 +53,7 @@ GAME.LEVEL = (function () {
     // levels
     var levelsURL = [
         "level/0.json",
+        "level/cave.json",
         "level/nice_mountain.json",
         "level/rock_castle.json"
     ];
