@@ -182,6 +182,11 @@ GAME.YACOPU = (function () {
             this.speedX += (tileIn.boostX || 0);
             this.speedY += (tileIn.boostY || 0);
         };
+        
+        // if interacting with hurt tile, cut speed in half
+        if (tileUnder.hurt || tileAbove.hurt || tileAhead.hurt) {
+            this.speedX = Math.floor(this.speedX / 2);
+        }
 
         // if standing on ground, cancel Y acceleration if positive
         if (tileUnder.solid) {

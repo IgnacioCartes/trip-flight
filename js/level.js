@@ -46,7 +46,13 @@ GAME.LEVEL = (function () {
             solid: false,
             boost: true,
             boostX: 1,
-            boosyY: 0
+            boostY: 0
+        },
+        "spike": {
+            color: "#ff0000",
+            solid: true,
+            bounce: 1,
+            hurt: true
         }
     };
 
