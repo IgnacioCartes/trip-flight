@@ -30,7 +30,7 @@ GAME.MODE = (function (mode) {
     // time-related variables
     var raceTime, countdownTime, initialTimeStamp, timeLeft;
     var hasRaceStarted, hasRaceEnded;
-    var timeBonus;
+    var timeBonus, lastCheckpointTime;
 
     // race variables
     var raceFailed;
@@ -186,6 +186,7 @@ GAME.MODE = (function (mode) {
             if (yacopu.isCrossingCheckpoint) {
                 // if one is crossed, add the bonusTime to timeLeft in 1/6th of a sec intervals
                 timeBonus += level.checkpoints[yacopu.nextCheckpoint - 1].bonusTime * 6;
+                lastCheckpointTime = raceTime;
             }
         }
 
@@ -219,14 +220,24 @@ GAME.MODE = (function (mode) {
         GAME.PARTICLE.renderAll(particles, context, scrollX);
 
         // add text
-        // race time
-        GAME.TEXT.pushTextToRender({
-            text: (raceTime / 60).toFixed(2),
-            x: 512,
-            y: 32
-        });
+        // race time - last checkpoint time if one was recently crossed
+        if (timeBonus) {
+            if ((raceTime % 16) >= 4) {
+                GAME.TEXT.pushTextToRender({
+                    text: (lastCheckpointTime / 60).toFixed(2),
+                    x: 512,
+                    y: 32
+                });
+            }
+        } else {
+            GAME.TEXT.pushTextToRender({
+                text: (raceTime / 60).toFixed(2),
+                x: 512,
+                y: 32
+            });
+        }
 
-        // remaining time if this us under 5 secs
+        // remaining time if this is under 5 secs
         if (timeLeft <= 300) {
             GAME.TEXT.pushTextToRender({
                 text: "-" + (timeLeft / 60).toFixed(2),

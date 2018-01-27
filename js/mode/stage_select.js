@@ -17,7 +17,7 @@ GAME.MODE = (function (mode) {
 
     // level preview names
     var levelPreview = [
-        "COMFY MTN.",
+        "BATTO CAVE",
         "ROCK CASTLE"
     ];
     var selectedLevel = 1;
